@@ -1,8 +1,12 @@
-# 六包 Skill v3.3 来源与验收矩阵
+# 六包 Skill v3.3 设计引用与验收矩阵
 
-## 1. 67 个来源 Skill 的唯一映射
+> **状态：仅文档（DOCUMENTATION ONLY）。** 本仓库未发布下表列出的任何实际 Skill 包；不包含其 `SKILL.md`、脚本、资源或可安装内容。
+>
+> 下表中的名称仅用于说明历史设计中的引用关系和验收目标，不表示这些 Skill 在本仓库中可用、可加载或已上传。
 
-| 顶层包 | 内部 reference | 来源 Skill |
+## 1. 67 个设计参考名称的唯一映射
+
+| 顶层包 | 内部 reference | 设计参考名称（未随仓库发布） |
 | --- | --- | --- |
 | requirements-contract | intake-and-scope | requirements-analysis; user-story-writing; prd-generator; requirement-grill; intake-review |
 | requirements-contract | stakeholders-and-priority | stakeholder-mapping; prioritization-framework; multi-perspective-review |
@@ -24,7 +28,7 @@
 | record-and-handoff | completion-and-handoff | completion-report; handoff |
 | record-and-handoff | simplicity-ledger | ponytail-debt; ponytail-gain; ponytail-help |
 
-计数为 12 + 12 + 13 + 10 + 12 + 8 = 67。每个来源只出现一次。
+计数为 12 + 12 + 13 + 10 + 12 + 8 = 67。此计数仅表示设计参考名称，每个名称只出现一次；不表示 67 个来源 Skill 已随本仓库发布。
 
 明确排除的 14 个网文 Skill：`arc-causality-check`、`chapter-checklist`、`de-ai-detection`、`dialogue-voice`、`hook-structure`、`novel-glossary`、`pacing-math`、`prompt-quality`、`style-fingerprint`、`style-voice-check`、`thread-balance`、`webnovel-rhythm-analysis`、`webnovel-storytelling`、`webnovel-template-audit`。
 
