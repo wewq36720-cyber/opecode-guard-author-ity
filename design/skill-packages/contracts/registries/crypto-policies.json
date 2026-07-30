@@ -1,0 +1,9 @@
+{
+  "schema_version": "guard-registry-component.v1",
+  "kind": "crypto_policies",
+  "entries": [
+    {"id":"skill-signature-ed25519.v1","canonicalization":"rfc8785-jcs","hash_algorithm":"sha256","signature_algorithm":"ed25519","domain":"opencode.skill-manifest-signature.v1"},
+    {"id":"provider-delivery-signature.v1","canonicalization":"rfc8785-jcs","hash_algorithm":"sha256","signature_algorithm":"registry_selected","domain":"opencode.provider-delivery-signature.v1"},
+    {"id":"schema-registry-signature-ed25519.v1","canonicalization":"rfc8785-jcs","hash_algorithm":"sha256","signature_algorithm":"ed25519","domain":"opencode.schema-registry-attestation.v1"}
+  ]
+}

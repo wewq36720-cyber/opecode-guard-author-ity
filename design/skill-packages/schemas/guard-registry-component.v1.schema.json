@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opencode.local/schemas/guard-registry-component.v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "kind", "entries"],
+  "properties": {
+    "schema_version": {"const": "guard-registry-component.v1"},
+    "kind": {"enum": ["authorities", "algorithms", "fact_domains", "predicates", "assertions", "artifact_schemas", "schema_attestations", "crypto_policies"]},
+    "entries": {"type": "array", "minItems": 1, "items": {"type": "object"}}
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "schema_version": "guard-registry-component.v1",
+  "kind": "algorithms",
+  "entries": [
+    {"id":"guard.acceptance.apply.v1","version":"1.0.0","owner":"guard","input_domain":"contract-defined","output_domain":"contract-defined"},
+    {"id":"guard.assertion.evaluate.v1","version":"1.0.0","owner":"guard","input_domain":"contract-defined","output_domain":"contract-defined"},
+    {"id":"guard.collection.append","version":"1.0.0","owner":"guard","input_domain":"contract-defined","output_domain":"contract-defined"},
+    {"id":"guard.correction.route.v1","version":"1.0.0","owner":"guard","input_domain":"contract-defined","output_domain":"contract-defined"},
+    {"id":"guard.evidence_index","version":"1.0.0","owner":"guard","input_domain":"contract-defined","output_domain":"contract-defined"},
+    {"id":"guard.freeze","version":"1.0.0","owner":"guard","input_domain":"contract-defined","output_domain":"contract-defined"},
+    {"id":"guard.manifest.append.v1","version":"1.0.0","owner":"guard","input_domain":"contract-defined","output_domain":"contract-defined"},
+    {"id":"guard.phase_gate.evaluate.v1","version":"1.0.0","owner":"guard","input_domain":"contract-defined","output_domain":"contract-defined"},
+    {"id":"guard.predicate.evaluate.v1","version":"1.0.0","owner":"guard","input_domain":"contract-defined","output_domain":"contract-defined"},
+    {"id":"guard.question_response.apply.v1","version":"1.0.0","owner":"guard","input_domain":"contract-defined","output_domain":"contract-defined"},
+    {"id":"guard.review.aggregate.v1","version":"1.0.0","owner":"guard","input_domain":"contract-defined","output_domain":"contract-defined"},
+    {"id":"guard.review.scope.v1","version":"1.0.0","owner":"guard","input_domain":"contract-defined","output_domain":"contract-defined"},
+    {"id":"guard.verification.aggregate.v1","version":"1.0.0","owner":"guard","input_domain":"contract-defined","output_domain":"contract-defined"}
+  ]
+}

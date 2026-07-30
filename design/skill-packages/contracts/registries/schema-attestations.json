@@ -1,0 +1,18 @@
+{
+  "schema_version": "guard-registry-component.v1",
+  "kind": "schema_attestations",
+  "entries": [
+    {
+      "id": "opencode-runtime-artifacts-v1",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "issuer_authority_id": "external.schema-registry",
+      "signature_policy_id": "schema-registry-signature-ed25519.v1",
+      "trust_store_id": "opencode-runtime-schema-registry-trust-v1",
+      "attestation_uri": "https://schemas.opencode.local/runtime/v1/attestations/opencode-runtime-artifacts-v1.json",
+      "binding_set_digest": "9eed0eebb14c97308b9aa90c07b0b09dfe67776bc068b7bc94d844546c1a9412",
+      "verification_mode": "runtime_required",
+      "design_time_status": "unverified"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": "guard-registry-component.v1",
+  "kind": "predicates",
+  "entries": [
+    {"id":"acceptance_approved","algorithm_id":"guard.predicate.evaluate.v1","result_domain":"tri_state","unknown_policy":"block"},
+    {"id":"always","algorithm_id":"guard.predicate.evaluate.v1","result_domain":"tri_state","unknown_policy":"block"},
+    {"id":"blocking_external_claims_present","algorithm_id":"guard.predicate.evaluate.v1","result_domain":"tri_state","unknown_policy":"block"},
+    {"id":"checkpoint_report_generated","algorithm_id":"guard.predicate.evaluate.v1","result_domain":"tri_state","unknown_policy":"block"},
+    {"id":"communication_paths_present","algorithm_id":"guard.predicate.evaluate.v1","result_domain":"tri_state","unknown_policy":"block"},
+    {"id":"completed_slices_present","algorithm_id":"guard.predicate.evaluate.v1","result_domain":"tri_state","unknown_policy":"block"},
+    {"id":"correction_proposal_present","algorithm_id":"guard.predicate.evaluate.v1","result_domain":"tri_state","unknown_policy":"block"},
+    {"id":"failures_present","algorithm_id":"guard.predicate.evaluate.v1","result_domain":"tri_state","unknown_policy":"block"},
+    {"id":"final_report_generated","algorithm_id":"guard.predicate.evaluate.v1","result_domain":"tri_state","unknown_policy":"block"},
+    {"id":"implementation_slice_executed","algorithm_id":"guard.predicate.evaluate.v1","result_domain":"tri_state","unknown_policy":"block"},
+    {"id":"multiple_review_axes_applicable","algorithm_id":"guard.predicate.evaluate.v1","result_domain":"tri_state","unknown_policy":"block"},
+    {"id":"package_loaded","algorithm_id":"guard.predicate.evaluate.v1","result_domain":"tri_state","unknown_policy":"block"},
+    {"id":"quality_scope_registered","algorithm_id":"guard.predicate.evaluate.v1","result_domain":"tri_state","unknown_policy":"block"},
+    {"id":"questions_present","algorithm_id":"guard.predicate.evaluate.v1","result_domain":"tri_state","unknown_policy":"block"},
+    {"id":"report_generated","algorithm_id":"guard.predicate.evaluate.v1","result_domain":"tri_state","unknown_policy":"block"},
+    {"id":"repository_mode_existing","algorithm_id":"guard.predicate.evaluate.v1","result_domain":"tri_state","unknown_policy":"block"},
+    {"id":"research_executed","algorithm_id":"guard.predicate.evaluate.v1","result_domain":"tri_state","unknown_policy":"block"},
+    {"id":"review_executed","algorithm_id":"guard.predicate.evaluate.v1","result_domain":"tri_state","unknown_policy":"block"},
+    {"id":"review_findings_present","algorithm_id":"guard.predicate.evaluate.v1","result_domain":"tri_state","unknown_policy":"block"},
+    {"id":"security_or_refactor_slice_present","algorithm_id":"guard.predicate.evaluate.v1","result_domain":"tri_state","unknown_policy":"block"},
+    {"id":"simplicity_entries_present","algorithm_id":"guard.predicate.evaluate.v1","result_domain":"tri_state","unknown_policy":"block"},
+    {"id":"skill_steps_executed","algorithm_id":"guard.predicate.evaluate.v1","result_domain":"tri_state","unknown_policy":"block"}
+  ]
+}

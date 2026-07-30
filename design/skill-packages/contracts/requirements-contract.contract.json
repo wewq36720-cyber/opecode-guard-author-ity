@@ -1,0 +1,146 @@
+{
+  "schema_version": "skill-contract.v3",
+  "skill": {"id": "requirements-contract", "version": "3.3.0", "stage": "planning.requirements", "entrypoint": "SKILL.md"},
+  "trust": {"manifest_schema": "package-manifest.v2", "canonicalization_policy_id": "bundle-canonical-windows.v1", "signature_policy_id": "skill-signature-ed25519.v1", "trust_store_id": "opencode-skill-trust.v1", "revocation_policy_id": "skill-revocation.v1", "registry_record_required": true, "atomic_install_required": true},
+  "artifact_catalog": [
+    {"name": "request", "schema_id": "artifact.request.v1", "producer": "external_control"},
+    {"name": "project_context", "schema_id": "artifact.project_context.v1", "producer": "guard"},
+    {"name": "requirements_draft", "schema_id": "artifact.requirements_draft.v2", "producer": "skill"},
+    {"name": "research_requests", "schema_id": "artifact.research_request_set.v1", "producer": "skill"},
+    {"name": "research_policy", "schema_id": "policy.research.v1", "producer": "guard"},
+    {"name": "research_record", "schema_id": "artifact.research_record.v2", "producer": "skill"},
+    {"name": "question_set", "schema_id": "artifact.question_set.v2", "producer": "skill"},
+    {"name": "question_response", "schema_id": "artifact.question_response.v1", "producer": "external_control"},
+    {"name": "response_bundle", "schema_id": "artifact.question_response_bundle.v1", "producer": "guard"},
+    {"name": "requirements_contract", "schema_id": "artifact.requirements_contract.v2", "producer": "skill"},
+    {"name": "blocking_record", "schema_id": "artifact.blocking_record.v1", "producer": "skill"},
+    {"name": "guard_blocking_record", "schema_id": "artifact.blocking_record.v1", "producer": "guard"},
+    {"name": "applicability_evidence", "schema_id": "artifact.applicability_evidence.v1", "producer": "guard"}
+  ],
+  "lifecycle": {
+    "public_states": ["PLANNING"],
+    "steps": [
+      {
+        "step_id": "planning.requirements.analyze", "owner": "skill", "kind": "primary", "public_state": "PLANNING",
+        "preconditions": ["run_bound", "request_schema_valid", "delivery_policy_frozen"],
+        "allowed_outcomes": ["completed", "clarification_required", "blocked"], "profile_ids": ["analysis"],
+        "inputs": [
+          {"artifact": "request", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "external_control", "producer_step_ids": ["external.control"], "revision": "invocation_frozen", "digest": "required"}},
+          {"artifact": "project_context", "cardinality": "optional", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["guard.freeze"], "revision": "invocation_frozen", "digest": "required"}},
+          {"artifact": "response_bundle", "cardinality": "optional", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["planning.requirements.apply_response"], "revision": "invocation_frozen", "digest": "required"}}
+        ],
+        "outputs_by_outcome": {
+          "completed": [{"artifact": "requirements_draft", "cardinality": "one", "source": "skill"}, {"artifact": "research_requests", "cardinality": "one", "source": "skill"}],
+          "clarification_required": [{"artifact": "requirements_draft", "cardinality": "one", "source": "skill"}, {"artifact": "question_set", "cardinality": "one", "source": "skill"}],
+          "blocked": [{"artifact": "blocking_record", "cardinality": "one", "source": "skill"}]
+        },
+        "exit_assertions_by_outcome": {
+          "completed": ["requirements_draft_valid", "research_request_set_valid", "requirements_obligations_satisfied", "delivery_receipt_valid"],
+          "clarification_required": ["requirements_draft_valid", "question_set_valid", "must_clarify_present", "delivery_receipt_valid"],
+          "blocked": ["blocking_record_valid", "delivery_receipt_valid"]
+        }
+      },
+      {
+        "step_id": "planning.requirements.research", "owner": "skill", "kind": "support", "public_state": "PLANNING",
+        "preconditions": ["requirements_draft_frozen", "research_requests_present", "research_policy_frozen"],
+        "allowed_outcomes": ["completed", "blocked"], "profile_ids": ["research"],
+        "inputs": [
+          {"artifact": "requirements_draft", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "skill", "producer_step_ids": ["planning.requirements.analyze"], "revision": "invocation_frozen", "digest": "required"}},
+          {"artifact": "research_requests", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "skill", "producer_step_ids": ["planning.requirements.analyze"], "revision": "invocation_frozen", "digest": "required"}},
+          {"artifact": "research_policy", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["guard.freeze"], "revision": "invocation_frozen", "digest": "required"}}
+        ],
+        "outputs_by_outcome": {
+          "completed": [{"artifact": "research_record", "cardinality": "one", "source": "skill"}],
+          "blocked": [{"artifact": "blocking_record", "cardinality": "one", "source": "skill"}]
+        },
+        "exit_assertions_by_outcome": {
+          "completed": ["research_record_valid", "research_provenance_complete", "research_policy_honored", "delivery_receipt_valid"],
+          "blocked": ["blocking_record_valid", "research_failure_preserved", "delivery_receipt_valid"]
+        }
+      },
+      {
+        "step_id": "planning.requirements.finalize", "owner": "skill", "kind": "aggregate", "public_state": "PLANNING",
+        "preconditions": ["requirements_draft_frozen", "research_requirements_resolved", "question_responses_applied"],
+        "allowed_outcomes": ["completed", "clarification_required", "blocked"], "profile_ids": ["analysis"],
+        "inputs": [
+          {"artifact": "requirements_draft", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "skill", "producer_step_ids": ["planning.requirements.analyze", "planning.requirements.finalize"], "revision": "invocation_frozen", "digest": "required"}},
+          {"artifact": "research_record", "cardinality": "optional", "source": {"kind": "artifact_ref", "authority": "skill", "producer_step_ids": ["planning.requirements.research"], "revision": "invocation_frozen", "digest": "required"}},
+          {"artifact": "response_bundle", "cardinality": "optional", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["planning.requirements.apply_response"], "revision": "invocation_frozen", "digest": "required"}}
+        ],
+        "outputs_by_outcome": {
+          "completed": [{"artifact": "requirements_contract", "cardinality": "one", "source": "skill"}],
+          "clarification_required": [{"artifact": "requirements_draft", "cardinality": "one", "source": "skill"}, {"artifact": "question_set", "cardinality": "one", "source": "skill"}],
+          "blocked": [{"artifact": "blocking_record", "cardinality": "one", "source": "skill"}]
+        },
+        "exit_assertions_by_outcome": {
+          "completed": ["requirements_contract_valid", "requirements_acceptance_covered", "acceptance_executable_shape", "blocking_claims_verified", "delivery_receipt_valid"],
+          "clarification_required": ["requirements_draft_valid", "question_set_valid", "must_clarify_present", "delivery_receipt_valid"],
+          "blocked": ["blocking_record_valid", "delivery_receipt_valid"]
+        }
+      },
+      {
+        "step_id": "planning.requirements.apply_response", "owner": "guard", "algorithm_id": "guard.question_response.apply.v1", "kind": "transition", "public_state": "PLANNING",
+        "preconditions": ["question_set_frozen", "question_response_present"],
+        "allowed_outcomes": ["response_applied", "blocked"], "profile_ids": [],
+        "inputs": [
+          {"artifact": "question_set", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "skill", "producer_step_ids": ["planning.requirements.analyze", "planning.requirements.finalize"], "revision": "invocation_frozen", "digest": "required"}},
+          {"artifact": "question_response", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "external_control", "producer_step_ids": ["external.control"], "revision": "invocation_frozen", "digest": "required"}}
+        ],
+        "outputs_by_outcome": {
+          "response_applied": [{"artifact": "response_bundle", "cardinality": "one", "source": "guard"}],
+          "blocked": [{"artifact": "guard_blocking_record", "cardinality": "one", "source": "guard"}]
+        },
+        "exit_assertions_by_outcome": {
+          "response_applied": ["question_response_authorized", "question_revision_matches", "resume_token_valid", "response_bundle_valid"],
+          "blocked": ["blocking_record_valid"]
+        }
+      }
+    ],
+    "routes": [
+      {"route_id": "requirements-start-initial", "decision_point": "start", "facts": {"invocation_kind": "initial"}, "next": {"step_id": "planning.requirements.analyze", "profile_id": "analysis"}},
+      {"route_id": "requirements-start-response", "decision_point": "start", "facts": {"invocation_kind": "question_response"}, "next": {"step_id": "planning.requirements.apply_response", "profile_id": null}},
+      {"route_id": "requirements-analyze-no-research", "decision_point": "after:planning.requirements.analyze", "facts": {"outcome": "completed", "research_requests": "empty"}, "next": {"step_id": "planning.requirements.finalize", "profile_id": "analysis"}},
+      {"route_id": "requirements-analyze-research", "decision_point": "after:planning.requirements.analyze", "facts": {"outcome": "completed", "research_requests": "nonempty"}, "next": {"step_id": "planning.requirements.research", "profile_id": "research"}},
+      {"route_id": "requirements-analyze-clarify", "decision_point": "after:planning.requirements.analyze", "facts": {"outcome": "clarification_required"}, "next": {"terminal_outcome": "clarification_required"}},
+      {"route_id": "requirements-analyze-blocked", "decision_point": "after:planning.requirements.analyze", "facts": {"outcome": "blocked"}, "next": {"terminal_outcome": "blocked"}},
+      {"route_id": "requirements-response-applied", "decision_point": "after:planning.requirements.apply_response", "facts": {"outcome": "response_applied"}, "next": {"terminal_outcome": "response_applied"}},
+      {"route_id": "requirements-response-blocked", "decision_point": "after:planning.requirements.apply_response", "facts": {"outcome": "blocked"}, "next": {"terminal_outcome": "blocked"}},
+      {"route_id": "requirements-research-completed", "decision_point": "after:planning.requirements.research", "facts": {"outcome": "completed"}, "next": {"step_id": "planning.requirements.finalize", "profile_id": "analysis"}},
+      {"route_id": "requirements-research-blocked", "decision_point": "after:planning.requirements.research", "facts": {"outcome": "blocked"}, "next": {"terminal_outcome": "blocked"}},
+      {"route_id": "requirements-final-completed", "decision_point": "after:planning.requirements.finalize", "facts": {"outcome": "completed"}, "next": {"terminal_outcome": "completed"}},
+      {"route_id": "requirements-final-clarify", "decision_point": "after:planning.requirements.finalize", "facts": {"outcome": "clarification_required"}, "next": {"terminal_outcome": "clarification_required"}},
+      {"route_id": "requirements-final-blocked", "decision_point": "after:planning.requirements.finalize", "facts": {"outcome": "blocked"}, "next": {"terminal_outcome": "blocked"}}
+    ],
+    "selection": "exactly_one_per_decision_point"
+  },
+  "reference_catalog": [
+    {"id": "intake-and-scope", "path": "references/intake-and-scope.md", "bundle_required": true},
+    {"id": "stakeholders-and-priority", "path": "references/stakeholders-and-priority.md", "bundle_required": true},
+    {"id": "research-and-evidence", "path": "references/research-and-evidence.md", "bundle_required": true}
+  ],
+  "profiles": [
+    {"id": "analysis", "step_ids": ["planning.requirements.analyze", "planning.requirements.finalize"], "references": ["intake-and-scope", "stakeholders-and-priority"], "max_references": 2},
+    {"id": "research", "step_ids": ["planning.requirements.research"], "references": ["research-and-evidence"], "max_references": 2}
+  ],
+  "permissions": {
+    "default": {"project_files": "guard_summary", "network": "deny", "commands": "deny", "runner": "none", "browser": "deny", "temp_artifacts": "guard_directory", "run_state": "deny", "approval": "deny", "version_selection": "deny", "profile_selection": "deny", "reference_selection": "deny"},
+    "step_overrides": [{"step_id": "planning.requirements.research", "network": "guard_allowlist", "browser": "registered_target_only"}]
+  },
+  "evidence": {"trust_proof_schema": "artifact.package_trust_proof.v2", "delivery_receipt_schema": "artifact.delivery_receipt.v2", "fragment_schema": "artifact.evidence_fragment.v2", "index_schema": "artifact.evidence_index.v2", "index_owner": "guard", "truncation_allowed": false, "required_bindings": ["manifest_payload_hash", "signature_key_id", "invocation_digest", "rendered_context_digest", "provider_attestation_digest", "request_nonce", "input_set_digest", "output_digest", "validity"]},
+  "acceptance": {
+    "evaluation_point": "before_external_acceptance", "aggregation": "all_applicable",
+    "criteria": [
+      {"id": "REQ-AC-01", "assertion_id": "requirements_contract_valid", "verifier": "guard", "evidence_schema_ids": ["artifact.requirements_contract.v2"], "applicability_predicate": "always", "not_applicable_assertion_id": "not_applicable_never", "blocking": true},
+      {"id": "REQ-AC-02", "assertion_id": "requirements_acceptance_covered", "verifier": "guard", "evidence_schema_ids": ["artifact.requirements_contract.v2"], "applicability_predicate": "always", "not_applicable_assertion_id": "not_applicable_never", "blocking": true},
+      {"id": "REQ-AC-03", "assertion_id": "requirements_actor_outcome_complete", "verifier": "guard", "evidence_schema_ids": ["artifact.requirements_contract.v2"], "applicability_predicate": "always", "not_applicable_assertion_id": "not_applicable_never", "blocking": true},
+      {"id": "REQ-AC-04", "assertion_id": "question_policy_controls_transition", "verifier": "guard", "evidence_schema_ids": ["artifact.question_set.v2", "artifact.question_response_bundle.v1"], "applicability_predicate": "questions_present", "not_applicable_assertion_id": "no_questions_proven", "blocking": true},
+      {"id": "REQ-AC-05", "assertion_id": "research_provenance_complete", "verifier": "guard", "evidence_schema_ids": ["artifact.research_record.v2"], "applicability_predicate": "research_executed", "not_applicable_assertion_id": "research_not_requested_proven", "blocking": true},
+      {"id": "REQ-AC-06", "assertion_id": "blocking_external_claims_verified", "verifier": "guard", "evidence_schema_ids": ["artifact.requirements_contract.v2", "artifact.research_record.v2"], "applicability_predicate": "blocking_external_claims_present", "not_applicable_assertion_id": "no_blocking_external_claims_proven", "blocking": true},
+      {"id": "REQ-AC-07", "assertion_id": "unverified_claims_nonblocking", "verifier": "guard", "evidence_schema_ids": ["artifact.requirements_contract.v2"], "applicability_predicate": "always", "not_applicable_assertion_id": "not_applicable_never", "blocking": true},
+      {"id": "REQ-AC-08", "assertion_id": "requirements_delivery_evidence_complete", "verifier": "guard", "evidence_schema_ids": ["artifact.delivery_receipt.v2", "artifact.evidence_fragment.v2"], "applicability_predicate": "skill_steps_executed", "not_applicable_assertion_id": "no_skill_step_invalid", "blocking": true}
+    ],
+    "self_test_is_acceptance": false
+  },
+  "errors": {"valid_outcomes": ["completed", "clarification_required", "response_applied", "blocked"], "contract_violations": ["INPUT_SCHEMA_INVALID", "OUTPUT_SCHEMA_INVALID", "ROUTE_SELECTION_INVALID", "PROFILE_SELECTION_INVALID", "BUNDLE_SIGNATURE_INVALID", "BUNDLE_REVOKED", "DELIVERY_UNVERIFIED", "NETWORK_SCOPE_ESCAPE", "FROZEN_VALUE_MUTATION", "SELF_APPROVAL_ATTEMPT"]},
+  "upgrade": {"compatibility": "new_version_requires_new_freeze", "fallback": "deny", "migration": "out_of_band_review"}
+}

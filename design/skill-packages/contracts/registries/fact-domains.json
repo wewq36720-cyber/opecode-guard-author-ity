@@ -1,0 +1,24 @@
+{
+  "schema_version": "guard-registry-component.v1",
+  "kind": "fact_domains",
+  "entries": [
+    {"id":"always","values":[true],"unknown_policy":"block"},
+    {"id":"invocation_kind","values":["initial","question_response"],"unknown_policy":"block"},
+    {"id":"outcome","values":["completed","clarification_required","response_applied","passed","changes_required","correction_required","retry_current_slice","create_bounded_correction","return_to_design","pass","block","advisory","approved","blocked"],"unknown_policy":"block"},
+    {"id":"research_requests","values":["empty","nonempty"],"unknown_policy":"block"},
+    {"id":"repository_mode","values":["existing","greenfield"],"unknown_policy":"block"},
+    {"id":"approved_pattern","values":[true,false],"unknown_policy":"block"},
+    {"id":"slice_kind","values":["standard","security_or_refactor","model_integration","ui"],"unknown_policy":"block"},
+    {"id":"remaining_slices","values":[true,false],"unknown_policy":"block"},
+    {"id":"next_slice_kind","values":["standard","security_or_refactor","model_integration","ui"],"unknown_policy":"block"},
+    {"id":"quality_scope","values":[true,false],"unknown_policy":"block"},
+    {"id":"failures","values":["empty","nonempty"],"unknown_policy":"block"},
+    {"id":"combined_failures","values":["empty","nonempty"],"unknown_policy":"block"},
+    {"id":"architecture_scope","values":[true,false],"unknown_policy":"block"},
+    {"id":"security_scope","values":[true,false],"unknown_policy":"block"},
+    {"id":"report_kind","values":["checkpoint","final","external_acceptance"],"unknown_policy":"block"},
+    {"id":"simplicity_entries","values":[true,false],"unknown_policy":"block"},
+    {"id":"simplicity_entries_present","values":[true,false],"unknown_policy":"block"},
+    {"id":"event_id","values":["task_bound","acceptance_decision_received"],"unknown_policy":"block"}
+  ]
+}

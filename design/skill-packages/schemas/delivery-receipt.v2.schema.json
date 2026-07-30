@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opencode.local/artifact-schemas/artifact.delivery_receipt.v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["invocation_digest", "rendered_context_digest", "message_sequence_digest", "tool_schema_digest", "delivered_bytes", "estimated_tokens", "budget", "provider_id", "provider_build", "session_id", "request_nonce", "truncation", "provider_attestation", "delivered_at"],
+  "properties": {
+    "invocation_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "rendered_context_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "message_sequence_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "tool_schema_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "delivered_bytes": {"type": "integer"},
+    "estimated_tokens": {"type": "integer"},
+    "budget": {"type": "integer"},
+    "provider_id": {"type": "string"},
+    "provider_build": {"type": "string"},
+    "session_id": {"type": "string"},
+    "request_nonce": {"type": "string"},
+    "truncation": {"const": false},
+    "provider_attestation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["payload_type", "payload_hash_algorithm", "payload_hash", "signature_algorithm", "issuer_key_id", "signature", "issued_at", "expires_at"],
+      "properties": {
+        "payload_type": {"const": "provider-delivery.v1"},
+        "payload_hash_algorithm": {"const": "sha256"},
+        "payload_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "signature_algorithm": {"type": "string"},
+        "issuer_key_id": {"type": "string"},
+        "signature": {"type": "string"},
+        "issued_at": {"type": "string"},
+        "expires_at": {"type": "string"}
+      }
+    },
+    "delivered_at": {"type": "string"}
+  }
+}

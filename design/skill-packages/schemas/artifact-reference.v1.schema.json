@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opencode.local/schemas/artifact-reference.v1.schema.json",
+  "$defs": {
+    "artifact_ref": {
+      "$id": "https://opencode.local/artifact-schemas/artifact.artifact_ref.v1",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_id", "schema_id", "producer_step_id", "producer_owner", "revision", "digest", "evidence_index_id", "evidence_index_revision", "validity_digest", "frozen_at"],
+      "properties": {
+        "artifact_id": {"type": "string"},
+        "schema_id": {"type": "string"},
+        "producer_step_id": {"type": "string"},
+        "producer_owner": {"enum": ["skill", "guard", "external_control"]},
+        "revision": {"type": "integer"},
+        "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "evidence_index_id": {"type": "string"},
+        "evidence_index_revision": {"type": "integer"},
+        "validity_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "frozen_at": {"type": "string"}
+      }
+    },
+    "artifact_collection_ref": {
+      "$id": "https://opencode.local/artifact-schemas/artifact.artifact_collection_ref.v1",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["collection_id", "schema_id", "revision", "digest", "index_keys", "member_refs", "evidence_index_id", "evidence_index_revision", "frozen_at"],
+      "properties": {
+        "collection_id": {"type": "string"},
+        "schema_id": {"type": "string"},
+        "revision": {"type": "integer"},
+        "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "index_keys": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "member_refs": {"type": "array", "items": {"$ref": "#/$defs/artifact_ref"}},
+        "evidence_index_id": {"type": "string"},
+        "evidence_index_revision": {"type": "integer"},
+        "frozen_at": {"type": "string"}
+      }
+    }
+  }
+}

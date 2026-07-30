@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "opencode-guard-authority"
+version = "2.0.0a1"
+description = "Fail-closed local development authority for OpenCode"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = []
+
+[project.optional-dependencies]
+mcp = ["mcp>=1,<2"]
+dev = [
+  "build>=1.2",
+  "mypy>=1.11",
+  "pytest>=8.3",
+  "ruff>=0.9",
+]
+
+[project.scripts]
+opencode-guard = "opencode_guardian.cli:main"
+opencode-guard-authority = "opencode_guardian.rpc:main"
+opencode-guard-mcp = "opencode_guardian.mcp:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q -p no:cacheprovider"
+pythonpath = ["src"]
+markers = ["docker_smoke: requires a healthy local Docker server and pinned image"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = [
+  "design/lifecycle-governance-v17",
+  "design/lifecycle-governance-v18",
+  "design/lifecycle-governance-v19",
+  "design/lifecycle-governance-v20",
+  "design/lifecycle-governance-v21",
+  "design/lifecycle-governance-v22",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["src"]

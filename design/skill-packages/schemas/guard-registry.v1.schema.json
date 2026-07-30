@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opencode.local/schemas/guard-registry.v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "registry_id", "version", "components"],
+  "properties": {
+    "schema_version": {"const": "guard-registry.v1"},
+    "registry_id": {"const": "opencode-guard-contract-registry"},
+    "version": {"type": "string", "pattern": "^1\\.[0-9]+\\.[0-9]+$"},
+    "components": {
+      "type": "array",
+      "minItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "path"],
+        "properties": {
+          "kind": {"enum": ["authorities", "algorithms", "fact_domains", "predicates", "assertions", "artifact_schemas", "schema_attestations", "crypto_policies"]},
+          "path": {"type": "string", "pattern": "^registries/[a-z-]+\\.json$"}
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": "guard-registry.v1",
+  "registry_id": "opencode-guard-contract-registry",
+  "version": "1.1.0",
+  "components": [
+    {
+      "kind": "authorities",
+      "path": "registries/authorities.json"
+    },
+    {
+      "kind": "algorithms",
+      "path": "registries/algorithms.json"
+    },
+    {
+      "kind": "fact_domains",
+      "path": "registries/fact-domains.json"
+    },
+    {
+      "kind": "predicates",
+      "path": "registries/predicates.json"
+    },
+    {
+      "kind": "assertions",
+      "path": "registries/assertions.json"
+    },
+    {
+      "kind": "artifact_schemas",
+      "path": "registries/artifact-schemas.json"
+    },
+    {
+      "kind": "schema_attestations",
+      "path": "registries/schema-attestations.json"
+    },
+    {
+      "kind": "crypto_policies",
+      "path": "registries/crypto-policies.json"
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "schema_version": "skill-contract.v3",
+  "skill": {"id": "record-and-handoff", "version": "3.3.0", "stage": "recording", "entrypoint": "SKILL.md"},
+  "trust": {"manifest_schema": "package-manifest.v2", "canonicalization_policy_id": "bundle-canonical-windows.v1", "signature_policy_id": "skill-signature-ed25519.v1", "trust_store_id": "opencode-skill-trust.v1", "revocation_policy_id": "skill-revocation.v1", "registry_record_required": true, "atomic_install_required": true},
+  "artifact_catalog": [
+    {"name": "evidence_index", "schema_id": "artifact.evidence_index.v2", "producer": "guard"},
+    {"name": "requirements_contract", "schema_id": "artifact.requirements_contract.v2", "producer": "skill"},
+    {"name": "solution_design", "schema_id": "artifact.solution_design.v2", "producer": "skill"},
+    {"name": "implementation_manifest", "schema_id": "artifact.implementation_manifest.v2", "producer": "guard"},
+    {"name": "verification_summary", "schema_id": "artifact.verification_summary.v1", "producer": "guard"},
+    {"name": "review_record", "schema_id": "artifact.review_record.v2", "producer": "guard"},
+    {"name": "simplicity_entries", "schema_id": "artifact.simplicity_entry_set.v1", "producer": "guard"},
+    {"name": "simplicity_record", "schema_id": "artifact.simplicity_record.v2", "producer": "skill"},
+    {"name": "handoff", "schema_id": "artifact.handoff.v2", "producer": "skill"},
+    {"name": "acceptance_decision", "schema_id": "artifact.acceptance_decision.v1", "producer": "external_control"},
+    {"name": "acceptance_policy", "schema_id": "policy.acceptance.v1", "producer": "guard"},
+    {"name": "acceptance_transition", "schema_id": "artifact.acceptance_transition.v1", "producer": "guard"},
+    {"name": "blocking_record", "schema_id": "artifact.blocking_record.v1", "producer": "skill"},
+    {"name": "guard_blocking_record", "schema_id": "artifact.blocking_record.v1", "producer": "guard"},
+    {"name": "applicability_evidence", "schema_id": "artifact.applicability_evidence.v1", "producer": "guard"}
+  ],
+  "lifecycle": {
+    "public_states": ["PLANNING", "IMPLEMENTING", "VERIFYING", "REVIEW_REQUIRED"],
+    "steps": [
+      {
+        "step_id": "record.checkpoint", "owner": "skill", "kind": "report", "public_states": ["PLANNING", "IMPLEMENTING", "VERIFYING", "REVIEW_REQUIRED"],
+        "preconditions": ["evidence_index_present", "report_request_checkpoint"],
+        "allowed_outcomes": ["completed", "blocked"], "profile_ids": ["standard"],
+        "inputs": [{"artifact": "evidence_index", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["guard.evidence_index"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "requirements_contract", "cardinality": "optional", "source": {"kind": "artifact_ref", "authority": "skill", "producer_step_ids": ["planning.requirements.finalize"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "solution_design", "cardinality": "optional", "source": {"kind": "artifact_ref", "authority": "skill", "producer_step_ids": ["planning.design.finalize"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "implementation_manifest", "cardinality": "optional", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["implementing.manifest.append"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "verification_summary", "cardinality": "optional", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["verifying.aggregate"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "review_record", "cardinality": "optional", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["review.aggregate"], "revision": "invocation_frozen", "digest": "required"}}],
+        "outputs_by_outcome": {"completed": [{"artifact": "handoff", "cardinality": "one", "source": "skill"}], "blocked": [{"artifact": "blocking_record", "cardinality": "one", "source": "skill"}]},
+        "exit_assertions_by_outcome": {"completed": ["checkpoint_handoff_valid", "checkpoint_stage_explicit", "handoff_single_index_revision", "handoff_claims_traceable", "handoff_no_acceptance", "delivery_receipt_valid"], "blocked": ["blocking_record_valid", "delivery_receipt_valid"]}
+      },
+      {
+        "step_id": "review.handoff.simplicity", "owner": "skill", "kind": "support", "public_state": "REVIEW_REQUIRED",
+        "preconditions": ["evidence_index_present", "simplicity_entries_present", "final_report_requested"],
+        "allowed_outcomes": ["completed", "blocked"], "profile_ids": ["simplicity"],
+        "inputs": [{"artifact": "evidence_index", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["guard.evidence_index"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "simplicity_entries", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["guard.freeze"], "revision": "invocation_frozen", "digest": "required"}}],
+        "outputs_by_outcome": {"completed": [{"artifact": "simplicity_record", "cardinality": "one", "source": "skill"}], "blocked": [{"artifact": "blocking_record", "cardinality": "one", "source": "skill"}]},
+        "exit_assertions_by_outcome": {"completed": ["simplicity_record_valid", "simplicity_boundaries_preserved", "history_immutable", "delivery_receipt_valid"], "blocked": ["blocking_record_valid", "delivery_receipt_valid"]}
+      },
+      {
+        "step_id": "review.handoff.final", "owner": "skill", "kind": "report", "public_state": "REVIEW_REQUIRED",
+        "preconditions": ["evidence_index_present", "review_record_passed", "final_report_requested"],
+        "allowed_outcomes": ["completed", "blocked"], "profile_ids": ["standard"],
+        "inputs": [{"artifact": "evidence_index", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["guard.evidence_index"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "requirements_contract", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "skill", "producer_step_ids": ["planning.requirements.finalize"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "solution_design", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "skill", "producer_step_ids": ["planning.design.finalize"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "implementation_manifest", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["implementing.manifest.append"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "verification_summary", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["verifying.aggregate"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "review_record", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["review.aggregate"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "simplicity_record", "cardinality": "optional", "source": {"kind": "artifact_ref", "authority": "skill", "producer_step_ids": ["review.handoff.simplicity"], "revision": "invocation_frozen", "digest": "required"}}],
+        "outputs_by_outcome": {"completed": [{"artifact": "handoff", "cardinality": "one", "source": "skill"}], "blocked": [{"artifact": "blocking_record", "cardinality": "one", "source": "skill"}]},
+        "exit_assertions_by_outcome": {"completed": ["final_handoff_valid", "handoff_single_index_revision", "handoff_claims_traceable", "handoff_status_separated", "final_handoff_coverage", "history_immutable", "handoff_no_acceptance", "delivery_receipt_valid"], "blocked": ["blocking_record_valid", "delivery_receipt_valid"]}
+      },
+      {
+        "step_id": "acceptance.apply", "owner": "guard", "algorithm_id": "guard.acceptance.apply.v1", "kind": "transition", "public_state": "REVIEW_REQUIRED",
+        "preconditions": ["final_handoff_frozen", "review_record_passed", "acceptance_decision_present", "acceptance_policy_frozen"],
+        "allowed_outcomes": ["approved", "blocked"], "profile_ids": [],
+        "inputs": [{"artifact": "evidence_index", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["guard.evidence_index"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "review_record", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["review.aggregate"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "handoff", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "skill", "producer_step_ids": ["review.handoff.final"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "acceptance_decision", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "external_control", "producer_step_ids": ["external.control"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "acceptance_policy", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["guard.freeze"], "revision": "invocation_frozen", "digest": "required"}}],
+        "outputs_by_outcome": {"approved": [{"artifact": "acceptance_transition", "cardinality": "one", "source": "guard"}], "blocked": [{"artifact": "guard_blocking_record", "cardinality": "one", "source": "guard"}]},
+        "exit_assertions_by_outcome": {"approved": ["all_blocking_acceptance_ids_authorized", "acceptance_actor_attested", "acceptance_revision_matches", "acceptance_not_expired", "run_revision_cas"], "blocked": ["blocking_record_valid", "run_state_unchanged"]}
+      }
+    ],
+    "routes": [
+      {"route_id": "record-start-checkpoint", "decision_point": "start", "facts": {"report_kind": "checkpoint"}, "next": {"step_id": "record.checkpoint", "profile_id": "standard"}},
+      {"route_id": "record-start-final-simplicity", "decision_point": "start", "facts": {"report_kind": "final", "simplicity_entries": true}, "next": {"step_id": "review.handoff.simplicity", "profile_id": "simplicity"}},
+      {"route_id": "record-start-final-direct", "decision_point": "start", "facts": {"report_kind": "final", "simplicity_entries": false}, "next": {"step_id": "review.handoff.final", "profile_id": "standard"}},
+      {"route_id": "record-start-acceptance", "decision_point": "start", "facts": {"report_kind": "external_acceptance"}, "next": {"step_id": "acceptance.apply", "profile_id": null}},
+      {"route_id": "record-checkpoint-completed", "decision_point": "after:record.checkpoint", "facts": {"outcome": "completed"}, "next": {"terminal_outcome": "completed"}},
+      {"route_id": "record-checkpoint-blocked", "decision_point": "after:record.checkpoint", "facts": {"outcome": "blocked"}, "next": {"terminal_outcome": "blocked"}},
+      {"route_id": "record-simplicity-completed", "decision_point": "after:review.handoff.simplicity", "facts": {"outcome": "completed"}, "next": {"step_id": "review.handoff.final", "profile_id": "standard"}},
+      {"route_id": "record-simplicity-blocked", "decision_point": "after:review.handoff.simplicity", "facts": {"outcome": "blocked"}, "next": {"terminal_outcome": "blocked"}},
+      {"route_id": "record-final-completed", "decision_point": "after:review.handoff.final", "facts": {"outcome": "completed"}, "next": {"terminal_outcome": "completed"}},
+      {"route_id": "record-final-blocked", "decision_point": "after:review.handoff.final", "facts": {"outcome": "blocked"}, "next": {"terminal_outcome": "blocked"}},
+      {"route_id": "record-acceptance-approved", "decision_point": "after:acceptance.apply", "facts": {"outcome": "approved"}, "next": {"terminal_outcome": "approved"}},
+      {"route_id": "record-acceptance-blocked", "decision_point": "after:acceptance.apply", "facts": {"outcome": "blocked"}, "next": {"terminal_outcome": "blocked"}}
+    ],
+    "selection": "exactly_one_per_decision_point"
+  },
+  "reference_catalog": [
+    {"id": "evidence-and-decisions", "path": "references/evidence-and-decisions.md", "bundle_required": true},
+    {"id": "completion-and-handoff", "path": "references/completion-and-handoff.md", "bundle_required": true},
+    {"id": "simplicity-ledger", "path": "references/simplicity-ledger.md", "bundle_required": true}
+  ],
+  "profiles": [
+    {"id": "standard", "step_ids": ["record.checkpoint", "review.handoff.final"], "references": ["evidence-and-decisions", "completion-and-handoff"], "max_references": 2},
+    {"id": "simplicity", "step_ids": ["review.handoff.simplicity"], "references": ["evidence-and-decisions", "simplicity-ledger"], "max_references": 2}
+  ],
+  "permissions": {"default": {"project_files": "none", "network": "deny", "commands": "deny", "runner": "none", "browser": "deny", "temp_artifacts": "guard_directory", "run_state": "deny", "approval": "deny", "version_selection": "deny", "profile_selection": "deny", "reference_selection": "deny"}, "step_overrides": []},
+  "evidence": {"trust_proof_schema": "artifact.package_trust_proof.v2", "delivery_receipt_schema": "artifact.delivery_receipt.v2", "fragment_schema": "artifact.evidence_fragment.v2", "index_schema": "artifact.evidence_index.v2", "index_owner": "guard", "truncation_allowed": false, "required_bindings": ["manifest_payload_hash", "signature_key_id", "invocation_digest", "provider_attestation_digest", "request_nonce", "evidence_index_id", "evidence_index_revision", "input_set_digest", "output_digest", "validity"]},
+  "acceptance": {
+    "evaluation_point": "before_external_acceptance", "aggregation": "all_applicable",
+    "criteria": [
+      {"id": "REC-AC-01", "assertion_id": "handoff_single_index_revision", "verifier": "guard", "evidence_schema_ids": ["artifact.evidence_index.v2", "artifact.handoff.v2"], "applicability_predicate": "report_generated", "not_applicable_assertion_id": "report_not_generated_invalid", "blocking": true},
+      {"id": "REC-AC-02", "assertion_id": "handoff_claims_traceable", "verifier": "guard", "evidence_schema_ids": ["artifact.handoff.v2"], "applicability_predicate": "report_generated", "not_applicable_assertion_id": "report_not_generated_invalid", "blocking": true},
+      {"id": "REC-AC-03", "assertion_id": "handoff_status_separated", "verifier": "guard", "evidence_schema_ids": ["artifact.handoff.v2"], "applicability_predicate": "report_generated", "not_applicable_assertion_id": "report_not_generated_invalid", "blocking": true},
+      {"id": "REC-AC-04", "assertion_id": "checkpoint_stage_explicit", "verifier": "guard", "evidence_schema_ids": ["artifact.handoff.v2"], "applicability_predicate": "checkpoint_report_generated", "not_applicable_assertion_id": "checkpoint_not_requested_proven", "blocking": true},
+      {"id": "REC-AC-05", "assertion_id": "final_handoff_coverage", "verifier": "guard", "evidence_schema_ids": ["artifact.handoff.v2"], "applicability_predicate": "final_report_generated", "not_applicable_assertion_id": "final_report_not_requested_proven", "blocking": true},
+      {"id": "REC-AC-06", "assertion_id": "history_immutable_and_no_self_reference", "verifier": "guard", "evidence_schema_ids": ["artifact.evidence_index.v2", "artifact.handoff.v2"], "applicability_predicate": "report_generated", "not_applicable_assertion_id": "report_not_generated_invalid", "blocking": true},
+      {"id": "REC-AC-07", "assertion_id": "simplicity_boundaries_preserved", "verifier": "guard", "evidence_schema_ids": ["artifact.simplicity_record.v2"], "applicability_predicate": "simplicity_entries_present", "not_applicable_assertion_id": "no_simplicity_entries_proven", "blocking": true},
+      {"id": "REC-AC-08", "assertion_id": "handoff_contains_no_acceptance", "verifier": "guard", "evidence_schema_ids": ["artifact.handoff.v2"], "applicability_predicate": "always", "not_applicable_assertion_id": "not_applicable_never", "blocking": true}
+    ],
+    "self_test_is_acceptance": false
+  },
+  "errors": {"valid_outcomes": ["completed", "approved", "blocked"], "contract_violations": ["INPUT_SCHEMA_INVALID", "OUTPUT_SCHEMA_INVALID", "ROUTE_SELECTION_INVALID", "PROFILE_SELECTION_INVALID", "BUNDLE_SIGNATURE_INVALID", "BUNDLE_REVOKED", "DELIVERY_UNVERIFIED", "EVIDENCE_REVISION_MISMATCH", "HISTORY_REWRITE_ATTEMPT", "ISOLATED_CLAIM", "ACCEPTANCE_AUTHORITY_INVALID", "ACCEPTANCE_REVISION_STALE", "SELF_APPROVAL_ATTEMPT"]},
+  "upgrade": {"compatibility": "new_version_requires_new_freeze", "fallback": "deny", "migration": "out_of_band_review"}
+}

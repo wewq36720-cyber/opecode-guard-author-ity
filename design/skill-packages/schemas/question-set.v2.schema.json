@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opencode.local/artifact-schemas/artifact.question_set.v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["question_set_id", "revision", "origin_step_id", "origin_profile_id", "resume_token", "frozen_input_set_revision", "questions", "issued_at", "expires_at"],
+  "properties": {
+    "question_set_id": {"type": "string"},
+    "revision": {"type": "integer"},
+    "origin_step_id": {"enum": ["planning.requirements.analyze", "planning.requirements.finalize", "planning.design.architecture", "planning.design.finalize"]},
+    "origin_profile_id": {"type": "string"},
+    "resume_token": {"type": "string", "pattern": "^[A-Za-z0-9_-]{32,}$"},
+    "frozen_input_set_revision": {"type": "integer"},
+    "questions": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["id", "class", "owner", "status"]}},
+    "issued_at": {"type": "string"},
+    "expires_at": {"type": "string"}
+  }
+}

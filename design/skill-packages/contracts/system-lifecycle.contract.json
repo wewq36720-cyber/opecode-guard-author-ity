@@ -1,0 +1,68 @@
+{
+  "schema_version": "system-lifecycle.v1",
+  "lifecycle_id": "opencode-six-skill-lifecycle",
+  "version": "1.2.0",
+  "public_states": ["PLANNING", "IMPLEMENTING", "VERIFYING", "REVIEW_REQUIRED", "ACCEPTED"],
+  "package_contracts": [
+    {"package_id": "requirements-contract", "schema_version": "skill-contract.v3", "version": "3.3.0"},
+    {"package_id": "solution-design", "schema_version": "skill-contract.v3", "version": "3.3.0"},
+    {"package_id": "execute-in-slices", "schema_version": "skill-contract.v3", "version": "3.3.0"},
+    {"package_id": "verify-and-diagnose", "schema_version": "skill-contract.v3", "version": "3.3.0"},
+    {"package_id": "review-and-gate", "schema_version": "skill-contract.v3", "version": "3.3.0"},
+    {"package_id": "record-and-handoff", "schema_version": "skill-contract.v3", "version": "3.3.0"}
+  ],
+  "start": {"node_id": "system.start", "event_id": "task_bound", "next_step_id": "planning.requirements.analyze", "public_state": "PLANNING"},
+  "virtual_nodes": [
+    {"node_id": "system.awaiting_acceptance", "kind": "suspension", "public_state": "REVIEW_REQUIRED"},
+    {"node_id": "system.blocked", "kind": "terminal", "public_state": "REVIEW_REQUIRED"},
+    {"node_id": "system.accepted", "kind": "terminal", "public_state": "ACCEPTED"}
+  ],
+  "transitions": [
+    {"transition_id": "requirements-to-design", "from_step_id": "planning.requirements.finalize", "terminal_outcome": "completed", "next_step_id": "planning.design.architecture", "public_state": "PLANNING"},
+    {"transition_id": "design-to-implementation", "from_step_id": "planning.phase_gate", "terminal_outcome": "completed", "next_step_id": "implementing.slice", "public_state": "IMPLEMENTING"},
+    {"transition_id": "design-revision-loop", "from_step_id": "planning.phase_gate", "terminal_outcome": "changes_required", "next_step_id": "planning.design.architecture", "public_state": "PLANNING"},
+    {"transition_id": "implementation-to-verification", "from_step_id": "implementing.manifest.append", "terminal_outcome": "completed", "next_step_id": "verifying.run", "public_state": "VERIFYING"},
+    {"transition_id": "implementation-to-design", "from_step_id": "correction.route", "terminal_outcome": "changes_required", "next_step_id": "planning.design.architecture", "public_state": "PLANNING"},
+    {"transition_id": "verification-to-correction", "from_step_id": "verifying.diagnose", "terminal_outcome": "correction_required", "next_step_id": "correction.route", "public_state": "IMPLEMENTING"},
+    {"transition_id": "verification-to-review", "from_step_id": "verifying.aggregate", "terminal_outcome": "completed", "next_step_id": "review.scope", "public_state": "REVIEW_REQUIRED"},
+    {"transition_id": "review-to-simplicity-handoff", "from_step_id": "review.aggregate", "terminal_outcome": "pass", "when": [{"fact_id": "simplicity_entries_present", "operator": "eq", "value": true}], "next_step_id": "review.handoff.simplicity", "public_state": "REVIEW_REQUIRED"},
+    {"transition_id": "review-to-final-handoff", "from_step_id": "review.aggregate", "terminal_outcome": "pass", "when": [{"fact_id": "simplicity_entries_present", "operator": "eq", "value": false}], "next_step_id": "review.handoff.final", "public_state": "REVIEW_REQUIRED"},
+    {"transition_id": "review-to-correction", "from_step_id": "review.aggregate", "terminal_outcome": "changes_required", "next_step_id": "correction.route", "public_state": "IMPLEMENTING"},
+    {"transition_id": "review-blocked", "from_step_id": "review.aggregate", "terminal_outcome": "block", "next_node_id": "system.blocked", "public_state": "REVIEW_REQUIRED"},
+    {"transition_id": "review-advisory", "from_step_id": "review.aggregate", "terminal_outcome": "advisory", "next_node_id": "system.blocked", "public_state": "REVIEW_REQUIRED"},
+    {"transition_id": "handoff-await-acceptance", "from_step_id": "review.handoff.final", "terminal_outcome": "completed", "next_node_id": "system.awaiting_acceptance", "public_state": "REVIEW_REQUIRED"},
+    {"transition_id": "acceptance-request", "from_node_id": "system.awaiting_acceptance", "event_id": "acceptance_decision_received", "next_step_id": "acceptance.apply", "public_state": "REVIEW_REQUIRED"},
+    {"transition_id": "acceptance-approved", "from_step_id": "acceptance.apply", "terminal_outcome": "approved", "next_node_id": "system.accepted", "public_state": "ACCEPTED"}
+  ],
+  "suspensions": [
+    {"suspension_id": "requirements-analyze-question", "origin_step_id": "planning.requirements.analyze", "terminal_outcome": "clarification_required", "question_schema_id": "artifact.question_set.v2", "response_schema_id": "artifact.question_response.v1", "apply_step_id": "planning.requirements.apply_response", "apply_terminal_outcome": "response_applied", "resume_step_id": "planning.requirements.analyze", "resume_input_artifact": "response_bundle"},
+    {"suspension_id": "requirements-finalize-question", "origin_step_id": "planning.requirements.finalize", "terminal_outcome": "clarification_required", "question_schema_id": "artifact.question_set.v2", "response_schema_id": "artifact.question_response.v1", "apply_step_id": "planning.requirements.apply_response", "apply_terminal_outcome": "response_applied", "resume_step_id": "planning.requirements.finalize", "resume_input_artifact": "response_bundle"},
+    {"suspension_id": "design-architecture-question", "origin_step_id": "planning.design.architecture", "terminal_outcome": "clarification_required", "question_schema_id": "artifact.question_set.v2", "response_schema_id": "artifact.question_response.v1", "apply_step_id": "planning.design.apply_response", "apply_terminal_outcome": "response_applied", "resume_step_id": "planning.design.architecture", "resume_input_artifact": "response_bundle"},
+    {"suspension_id": "design-finalize-question", "origin_step_id": "planning.design.finalize", "terminal_outcome": "clarification_required", "question_schema_id": "artifact.question_set.v2", "response_schema_id": "artifact.question_response.v1", "apply_step_id": "planning.design.apply_response", "apply_terminal_outcome": "response_applied", "resume_step_id": "planning.design.finalize", "resume_input_artifact": "response_bundle"}
+  ],
+  "terminal_policies": [
+    {"terminal_outcome": "blocked", "applies_to": "all_package_steps", "next_node_id": "system.blocked"}
+  ],
+  "sidecars": [
+    {"step_id": "record.checkpoint", "invocation_events": ["automatic_pause", "retry_exhausted", "awaiting_response", "status_query"], "advances_primary_lifecycle": false}
+  ],
+  "acceptance": {
+    "aggregation": "all_applicable",
+    "criteria": [
+      {"id": "SYS-AC-01", "assertion_id": "system_graph_reachable_and_state_consistent", "verifier_authority_id": "guard.validator", "applicability_predicate": "always", "blocking": true},
+      {"id": "SYS-AC-02", "assertion_id": "package_terminal_events_consumed_once", "verifier_authority_id": "guard.validator", "applicability_predicate": "always", "blocking": true},
+      {"id": "SYS-AC-03", "assertion_id": "system_transitions_mutually_exclusive_complete", "verifier_authority_id": "guard.validator", "applicability_predicate": "always", "blocking": true},
+      {"id": "SYS-AC-04", "assertion_id": "artifact_refs_reachable_and_frozen", "verifier_authority_id": "guard.validator", "applicability_predicate": "always", "blocking": true},
+      {"id": "SYS-AC-05", "assertion_id": "clarification_resume_origin_exact", "verifier_authority_id": "guard.validator", "applicability_predicate": "questions_present", "blocking": true},
+      {"id": "SYS-AC-06", "assertion_id": "review_collection_complete", "verifier_authority_id": "guard.validator", "applicability_predicate": "review_executed", "blocking": true},
+      {"id": "SYS-AC-07", "assertion_id": "conditional_acceptance_noncyclic", "verifier_authority_id": "guard.validator", "applicability_predicate": "always", "blocking": true},
+      {"id": "SYS-AC-08", "assertion_id": "registry_references_and_schema_bindings_resolve", "verifier_authority_id": "guard.validator", "applicability_predicate": "always", "blocking": true},
+      {"id": "SYS-AC-09", "assertion_id": "manifest_detached_signature_valid", "verifier_authority_id": "guard.trust", "applicability_predicate": "package_loaded", "blocking": true},
+      {"id": "SYS-AC-10", "assertion_id": "provider_attestation_verified", "verifier_authority_id": "guard.delivery", "applicability_predicate": "skill_steps_executed", "blocking": true},
+      {"id": "SYS-AC-11", "assertion_id": "validation_report_semantically_reproducible", "verifier_authority_id": "guard.validator", "applicability_predicate": "always", "blocking": true},
+      {"id": "SYS-AC-12", "assertion_id": "acceptance_transition_post_apply", "verifier_authority_id": "guard.acceptance", "applicability_predicate": "acceptance_approved", "blocking": true}
+    ],
+    "self_test_is_acceptance": false
+  },
+  "unknown_transition_policy": "block"
+}

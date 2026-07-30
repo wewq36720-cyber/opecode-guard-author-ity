@@ -1,0 +1,17 @@
+{
+  "schema_version": "scope-evidence.v1",
+  "root": "F:\\OpenCode\\mcp",
+  "exclusions": [
+    ".codex/protocol/current/**",
+    "design/skill-packages/**",
+    ".git/**",
+    "tool caches",
+    "__pycache__"
+  ],
+  "file_count": 49,
+  "aggregate_sha256": "620107a9090733f65516b91b2ea0a36193581fe3cc438047ecec36f23b27a61e",
+  "captured_at": "2026-07-20T04:49:38.1301547Z",
+  "capture_boundary": "corrected after protocol/design edits and before final validation",
+  "max_forbidden_last_write_utc": "2026-07-18T23:23:47Z",
+  "evidence_limitation": "The original pre-edit aggregate used an invalid path separator normalization. This corrected baseline proves no forbidden-scope change after capture; NTFS LastWriteTime supports, but does not cryptographically prove, the earlier interval."
+}

@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opencode.local/schemas/skill-contract.v3.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "skill", "trust", "artifact_catalog", "lifecycle", "reference_catalog", "profiles", "permissions", "evidence", "acceptance", "errors", "upgrade"],
+  "properties": {
+    "schema_version": {"const": "skill-contract.v3"},
+    "skill": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "stage", "entrypoint"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]+$"},
+        "version": {"type": "string", "pattern": "^3\\.3\\.[0-9]+$"},
+        "stage": {"type": "string"},
+        "entrypoint": {"const": "SKILL.md"}
+      }
+    },
+    "trust": {"type": "object", "required": ["manifest_schema", "canonicalization_policy_id", "signature_policy_id", "trust_store_id", "revocation_policy_id", "registry_record_required", "atomic_install_required"]},
+    "artifact_catalog": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "schema_id", "producer"],
+        "properties": {
+          "name": {"type": "string"},
+          "schema_id": {"type": "string"},
+          "producer": {"enum": ["skill", "guard", "external_control", "skill_or_guard"]}
+        }
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["public_states", "steps", "routes", "selection"],
+      "properties": {
+        "public_states": {"type": "array", "minItems": 1, "items": {"enum": ["PLANNING", "IMPLEMENTING", "VERIFYING", "REVIEW_REQUIRED"]}},
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["step_id", "owner", "kind", "preconditions", "allowed_outcomes", "profile_ids", "inputs", "outputs_by_outcome", "exit_assertions_by_outcome"],
+            "properties": {
+              "step_id": {"type": "string"},
+              "owner": {"enum": ["skill", "guard"]},
+              "algorithm_id": {"type": "string"},
+              "kind": {"enum": ["primary", "support", "aggregate", "report", "transition"]},
+              "public_state": {"enum": ["PLANNING", "IMPLEMENTING", "VERIFYING", "REVIEW_REQUIRED"]},
+              "public_states": {"type": "array", "minItems": 1, "items": {"enum": ["PLANNING", "IMPLEMENTING", "VERIFYING", "REVIEW_REQUIRED"]}},
+              "preconditions": {"type": "array", "items": {"type": "string"}},
+              "allowed_outcomes": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+              "profile_ids": {"type": "array", "items": {"type": "string"}},
+              "inputs": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["artifact", "cardinality", "source"],
+                  "properties": {
+                    "artifact": {"type": "string"},
+                    "cardinality": {"enum": ["one", "optional", "ordered_many"]},
+                    "source": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": ["kind", "authority", "producer_step_ids", "revision", "digest"],
+                      "properties": {
+                        "kind": {"enum": ["artifact_ref", "artifact_collection_ref"]},
+                        "authority": {"enum": ["skill", "guard", "external_control", "skill_or_guard"]},
+                        "producer_step_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+                        "revision": {"const": "invocation_frozen"},
+                        "digest": {"const": "required"},
+                        "collection_id": {"type": "string"},
+                        "index_keys": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+                      }
+                    }
+                  }
+                }
+              },
+              "outputs_by_outcome": {"type": "object"},
+              "exit_assertions_by_outcome": {"type": "object"}
+            }
+          }
+        },
+        "routes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["route_id", "decision_point", "facts", "next"],
+            "properties": {
+              "route_id": {"type": "string"},
+              "decision_point": {"type": "string"},
+              "facts": {"type": "object"},
+              "next": {"type": "object"}
+            }
+          }
+        },
+        "selection": {"const": "exactly_one_per_decision_point"}
+      }
+    },
+    "reference_catalog": {"type": "array"},
+    "profiles": {"type": "array"},
+    "permissions": {"type": "object"},
+    "evidence": {"type": "object", "required": ["trust_proof_schema", "delivery_receipt_schema", "fragment_schema", "index_schema", "required_bindings"]},
+    "acceptance": {"type": "object", "required": ["evaluation_point", "aggregation", "criteria", "self_test_is_acceptance"]},
+    "errors": {"type": "object", "required": ["valid_outcomes", "contract_violations"]},
+    "upgrade": {"type": "object", "required": ["compatibility", "fallback", "migration"]}
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "opencode-guard-authority-plugin",
+  "version": "2.0.0-alpha.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "@opencode-ai/plugin": "1.18.3"
+  }
+}

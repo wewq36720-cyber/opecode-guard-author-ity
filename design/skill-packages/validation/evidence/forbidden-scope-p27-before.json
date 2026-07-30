@@ -1,0 +1,16 @@
+{
+  "schema_version": "scope-evidence.v1",
+  "root": "F:\\OpenCode\\mcp",
+  "exclusions": [
+    ".codex/protocol/current/**",
+    "design/skill-packages/**",
+    ".git/**",
+    "tool caches",
+    "__pycache__"
+  ],
+  "file_count": 3716,
+  "aggregate_sha256": "4d0e6519d52b986333920f555ed8953b9b2df5ba2929ca3a68dcae75c1d1b0e5",
+  "captured_at": "2026-07-20T16:23:31.5240183Z",
+  "capture_boundary": "after P27 protocol/design/validator edits and before build/final validation",
+  "evidence_limitation": "Proves no forbidden-scope change after this capture; the P26 node_modules environment artifact is included rather than excluded."
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opencode.local/artifact-schemas/package-manifest.v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["unsigned_manifest", "signature_envelope"],
+  "properties": {
+    "unsigned_manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "skill_id", "skill_version", "contract_schema", "canonicalization_policy_id", "files", "installer_id", "installed_at"],
+      "properties": {
+        "schema": {"const": "package-manifest.v2"},
+        "skill_id": {"type": "string"},
+        "skill_version": {"type": "string"},
+        "contract_schema": {"const": "skill-contract.v3"},
+        "canonicalization_policy_id": {"const": "bundle-canonical-windows.v1"},
+        "files": {"type": "array", "minItems": 2, "items": {"type": "object", "required": ["normalized_relative_path", "role", "byte_length", "sha256"]}},
+        "installer_id": {"type": "string"},
+        "installed_at": {"type": "string"}
+      }
+    },
+    "signature_envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["payload_type", "payload_hash_algorithm", "payload_hash", "signature_algorithm", "key_id", "signature", "signed_at"],
+      "properties": {
+        "payload_type": {"const": "package-manifest.v2"},
+        "payload_hash_algorithm": {"const": "sha256"},
+        "payload_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "signature_algorithm": {"const": "ed25519"},
+        "key_id": {"type": "string"},
+        "signature": {"type": "string"},
+        "signed_at": {"type": "string"}
+      }
+    }
+  }
+}

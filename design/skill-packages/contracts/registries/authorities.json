@@ -1,0 +1,14 @@
+{
+  "schema_version": "guard-registry-component.v1",
+  "kind": "authorities",
+  "entries": [
+    {"id":"guard","kind":"deterministic_guard","can_verify":["assertion","not_applicable"]},
+    {"id":"registered_check","kind":"registered_runner","can_verify":["assertion"]},
+    {"id":"attested_reviewer","kind":"external_attested_reviewer","can_verify":["review_assertion"]},
+    {"id":"guard.validator","kind":"offline_validator","can_verify":["system_assertion"]},
+    {"id":"guard.trust","kind":"trust_validator","can_verify":["trust_assertion"]},
+    {"id":"guard.delivery","kind":"delivery_validator","can_verify":["delivery_assertion"]},
+    {"id":"guard.acceptance","kind":"acceptance_validator","can_verify":["acceptance_assertion"]},
+    {"id":"external.schema-registry","kind":"external_schema_registry","can_verify":["schema_attestation"],"trust_store_id":"opencode-runtime-schema-registry-trust-v1"}
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": "scope-evidence.v1",
+  "root": "F:\\OpenCode\\mcp",
+  "exclusions": [
+    ".codex/protocol/current/**",
+    "design/skill-packages/**",
+    "tests/unit/test_contract_validator_isolation.py",
+    ".git/**",
+    "tool caches",
+    "__pycache__"
+  ],
+  "file_count": 3720,
+  "aggregate_sha256": "9d9d8696ab6d3db76a7171a58a96f65ba5e2fa31f036b897f2be2fdd7779c2bb"
+}

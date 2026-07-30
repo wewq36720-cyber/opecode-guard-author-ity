@@ -1,0 +1,214 @@
+{
+  "checks": [
+    {
+      "check_id": "schema",
+      "error_count": 0,
+      "status": "OK"
+    },
+    {
+      "check_id": "registry",
+      "error_count": 0,
+      "status": "OK"
+    },
+    {
+      "check_id": "package_routes",
+      "error_count": 0,
+      "status": "OK"
+    },
+    {
+      "check_id": "artifact_reachability",
+      "error_count": 0,
+      "status": "OK"
+    },
+    {
+      "check_id": "system_lifecycle",
+      "error_count": 0,
+      "status": "OK"
+    },
+    {
+      "check_id": "negative_probes",
+      "error_count": 0,
+      "status": "OK"
+    },
+    {
+      "check_id": "forbidden_scope",
+      "error_count": 0,
+      "status": "OK"
+    }
+  ],
+  "correlation_id": "6e98c8e58b24c5c6",
+  "errors": [],
+  "input_digest": "6e98c8e58b24c5c6f3ec03c92e7898ea6af420ec5c753c90ae2df44bde3d7d96",
+  "input_files": [
+    {
+      "path": "contracts/execute-in-slices.contract.json",
+      "sha256": "866b9a95d3f4d519b345a6ef7ae853203d5a0a654e379b18520f13587a40eee0"
+    },
+    {
+      "path": "contracts/guard-registry.json",
+      "sha256": "578cce94aa7edecc9552f7e4cdd717b5e16e500c0e327f256462a2b6944045c2"
+    },
+    {
+      "path": "contracts/record-and-handoff.contract.json",
+      "sha256": "3543199d0de7bc0cc68de85417ead1d91e4fc0ded5da28dc8c59c26d94e93037"
+    },
+    {
+      "path": "contracts/registries/algorithms.json",
+      "sha256": "2d203b4172246da80b3941f1b4ad7fe5d2afb98b5a4ebb108c75cee56464b5ae"
+    },
+    {
+      "path": "contracts/registries/artifact-schemas.json",
+      "sha256": "fa12cd97322a0b6b1b3d046b52c8694257f9aa2bdbd8fa4aa9908399d2fba0e5"
+    },
+    {
+      "path": "contracts/registries/assertions.json",
+      "sha256": "0ffe504362ebc0fc285702ea04b4d9d0232c9f0bf6011ddbfebae3015fed862a"
+    },
+    {
+      "path": "contracts/registries/authorities.json",
+      "sha256": "090bafe3506759e789f75a826fbcb24a40f35d897fa729a52c51c1f3903435eb"
+    },
+    {
+      "path": "contracts/registries/crypto-policies.json",
+      "sha256": "d51fbc93d685a3ac09e7b528cbc53e1020d7b0477255d6890a7997274b7c115e"
+    },
+    {
+      "path": "contracts/registries/fact-domains.json",
+      "sha256": "c79193daf167558b835f2693f5854902b8e47af5133329d0db57c1fc4a513ad6"
+    },
+    {
+      "path": "contracts/registries/predicates.json",
+      "sha256": "96a05f46c4a6828a12605ef9ec52b5e0188bd40c9f2ac68e804fda74da5aaa62"
+    },
+    {
+      "path": "contracts/registries/schema-attestations.json",
+      "sha256": "877eeefd0ce94a6f549565daca62555d4438dd4b986b995a879d2455bd4b56da"
+    },
+    {
+      "path": "contracts/requirements-contract.contract.json",
+      "sha256": "6345a701862f97a8d9cc22d1e9924cbc1f8db62bd178d9f22668a7f905cd7498"
+    },
+    {
+      "path": "contracts/review-and-gate.contract.json",
+      "sha256": "e6d6a8d144e1cf60552bddc0a32d6d7a8d47cdd42da1afeb01507c5f5c225d75"
+    },
+    {
+      "path": "contracts/solution-design.contract.json",
+      "sha256": "4f006cbcbd8a5741ef52074158bc65ea04d4806a88965ea094b083f1cc51b790"
+    },
+    {
+      "path": "contracts/system-lifecycle.contract.json",
+      "sha256": "9ca489eda20481de68c33920185efd992405b5ce19221c3fec9721dbe27d65c9"
+    },
+    {
+      "path": "contracts/verify-and-diagnose.contract.json",
+      "sha256": "e986a5ca193a7f73b70af10d6fab81bd3376fd2b5186d50972b76cf8742fbf87"
+    },
+    {
+      "path": "schemas/artifact-reference.v1.schema.json",
+      "sha256": "3bb265607c8937cd51b218e1568bae80ce36b997491d1f77bbdb468e0fb8b25e"
+    },
+    {
+      "path": "schemas/delivery-receipt.v2.schema.json",
+      "sha256": "46aed9ddeac2ec5e60bc2cbd154b4f149e4269f7dc857b0306dedb2e387c02d6"
+    },
+    {
+      "path": "schemas/guard-registry-component.v1.schema.json",
+      "sha256": "1a4ad43abd2d7de37192d9f454fe2203d6643e3daab6d1531d683d4b60b7e22f"
+    },
+    {
+      "path": "schemas/guard-registry.v1.schema.json",
+      "sha256": "f2e543aae175caac18efc48858be280bf04b4f507402eaf34243bb96cfee16f2"
+    },
+    {
+      "path": "schemas/package-manifest.v2.schema.json",
+      "sha256": "dfbdc7cdc40a7bc7f2a3a4bbd82c659a1ead32bf477cef1da1b9a418e06934b2"
+    },
+    {
+      "path": "schemas/question-set.v2.schema.json",
+      "sha256": "5228c4b2da600bcf7ec158d589cced14e2ddfd94f236b110442d6ffeed501587"
+    },
+    {
+      "path": "schemas/skill-contract.v3.schema.json",
+      "sha256": "4155120fb569b8a3d061980756a1252ecb3d131129a0c31f753708d2a935ecfe"
+    },
+    {
+      "path": "schemas/system-lifecycle.v1.schema.json",
+      "sha256": "f13e35efb24e1e1d37b06f665c6292e95517f99fd1ab1185c465c1044dc225af"
+    },
+    {
+      "path": "validation/graph_checks.py",
+      "sha256": "3ce58f22ccec229598af6e268a498c3b33ea6326779e82ad3c121d4bbf8f24b8"
+    },
+    {
+      "path": "validation/isolated_worker.py",
+      "sha256": "3226beb3d9d3167dee6bac9344d3d2191ca19ce1bab8161f12c7bf03b61e48ce"
+    },
+    {
+      "path": "validation/model.py",
+      "sha256": "597741e5b170c57918e8488efa904a437de28f19a260f6ed2865b8bef50f7c27"
+    },
+    {
+      "path": "validation/registry_checks.py",
+      "sha256": "f67a33f9cc94f753ccd93eb4994a7559ee77ac963fd0ea9319312a8a537bbe8d"
+    },
+    {
+      "path": "validation/schema_checks.py",
+      "sha256": "1faa381dfa9402c6a6d7a73dd2fd286fc78fe4715b8bc9a6d705373e545135e9"
+    },
+    {
+      "path": "validation/validate_contracts.py",
+      "sha256": "36364d19e67955a0430f513898719666bedabfdf242d8ddb5fb71285e990be31"
+    }
+  ],
+  "schema_version": "contract-validation-report.v1",
+  "scope_evidence": {
+    "after": {
+      "aggregate_sha256": "781cb14777d5012657a8c20e4bbd5fe77be11434e09af01197d5ef97e738f06a",
+      "exclusions": [
+        ".codex/protocol/current/**",
+        "design/skill-packages/**",
+        "tests/unit/test_contract_validator_isolation.py",
+        ".git/**",
+        "tool caches",
+        "__pycache__"
+      ],
+      "file_count": 3848,
+      "root": "F:\\OpenCode\\mcp",
+      "schema_version": "scope-evidence.v1"
+    },
+    "before": {
+      "aggregate_sha256": "781cb14777d5012657a8c20e4bbd5fe77be11434e09af01197d5ef97e738f06a",
+      "exclusions": [
+        ".codex/protocol/current/**",
+        "design/skill-packages/**",
+        "tests/unit/test_contract_validator_isolation.py",
+        ".git/**",
+        "tool caches",
+        "__pycache__"
+      ],
+      "file_count": 3848,
+      "root": "F:\\OpenCode\\mcp",
+      "schema_version": "scope-evidence.v1"
+    },
+    "matches": true
+  },
+  "status": "OK",
+  "validator_version": "1.5.3",
+  "validator_command": [
+    "G:\\python\\python.exe",
+    "design\\skill-packages\\validation\\validate_contracts.py",
+    "--root",
+    "design\\skill-packages",
+    "--scope-root",
+    ".",
+    "--scope-before",
+    "design\\skill-packages\\validation\\evidence\\forbidden-scope-p45-checkpoint.json",
+    "--report",
+    "design\\skill-packages\\validation\\evidence\\contract-validation-report.json"
+  ],
+  "semantic_result_digest": "42b9b8c63b888c86f2205ba5376ef9ad133f364288f26f85301c41439c2fc963",
+  "semantic_result_digest_definition": "sha256(canonical JSON of schema_version, validator_version, correlation_id, input_files, input_digest, checks, status, errors, and scope_evidence)",
+  "report_digest_definition": "sha256(canonical JSON of the full report excluding report_digest); this includes validator_command and may vary across equivalent commands",
+  "report_digest": "5fc27ebcb2993fae0a874ffdd129b983ed95ed95a231da780f0d8f99c910002f"
+}

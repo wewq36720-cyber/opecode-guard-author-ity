@@ -1,0 +1,109 @@
+{
+  "schema_version": "skill-contract.v3",
+  "skill": {"id": "verify-and-diagnose", "version": "3.3.0", "stage": "verifying", "entrypoint": "SKILL.md"},
+  "trust": {"manifest_schema": "package-manifest.v2", "canonicalization_policy_id": "bundle-canonical-windows.v1", "signature_policy_id": "skill-signature-ed25519.v1", "trust_store_id": "opencode-skill-trust.v1", "revocation_policy_id": "skill-revocation.v1", "registry_record_required": true, "atomic_install_required": true},
+  "artifact_catalog": [
+    {"name": "implementation_manifest", "schema_id": "artifact.implementation_manifest.v2", "producer": "guard"},
+    {"name": "implementation_records", "schema_id": "artifact.implementation_record_collection.v1", "producer": "guard"},
+    {"name": "check_registry", "schema_id": "registry.checks.v2", "producer": "guard"},
+    {"name": "runner_policy", "schema_id": "policy.runner.v2", "producer": "guard"},
+    {"name": "workspace_snapshot", "schema_id": "artifact.workspace_snapshot.v2", "producer": "guard"},
+    {"name": "evaluation_policy", "schema_id": "policy.evaluation.v1", "producer": "guard"},
+    {"name": "evaluation_anchors", "schema_id": "artifact.evaluation_anchor_set.v1", "producer": "guard"},
+    {"name": "failure_event_set", "schema_id": "artifact.failure_event_set.v1", "producer": "guard"},
+    {"name": "verification_run", "schema_id": "artifact.verification_run.v2", "producer": "skill"},
+    {"name": "evaluation_record", "schema_id": "artifact.evaluation_record.v2", "producer": "skill"},
+    {"name": "diagnosis_record", "schema_id": "artifact.diagnosis_record.v2", "producer": "skill"},
+    {"name": "correction_proposal", "schema_id": "artifact.correction_proposal.v1", "producer": "skill"},
+    {"name": "verification_summary", "schema_id": "artifact.verification_summary.v1", "producer": "guard"},
+    {"name": "blocking_record", "schema_id": "artifact.blocking_record.v1", "producer": "skill"},
+    {"name": "guard_blocking_record", "schema_id": "artifact.blocking_record.v1", "producer": "guard"},
+    {"name": "applicability_evidence", "schema_id": "artifact.applicability_evidence.v1", "producer": "guard"}
+  ],
+  "lifecycle": {
+    "public_states": ["VERIFYING"],
+    "steps": [
+      {
+        "step_id": "verifying.run", "owner": "skill", "kind": "primary", "public_state": "VERIFYING",
+        "preconditions": ["implementation_manifest_frozen", "check_registry_frozen", "runner_policy_frozen", "workspace_source_revision_frozen"],
+        "allowed_outcomes": ["completed", "blocked"], "profile_ids": ["run"],
+        "inputs": [{"artifact": "implementation_manifest", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["implementing.manifest.append"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "implementation_records", "cardinality": "ordered_many", "source": {"kind": "artifact_collection_ref", "authority": "guard", "producer_step_ids": ["guard.collection.append"], "revision": "invocation_frozen", "digest": "required", "collection_id": "implementation-records", "index_keys": ["slice_order", "artifact_revision"]}}, {"artifact": "check_registry", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["guard.freeze"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "runner_policy", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["guard.freeze"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "workspace_snapshot", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["guard.freeze"], "revision": "invocation_frozen", "digest": "required"}}],
+        "outputs_by_outcome": {"completed": [{"artifact": "verification_run", "cardinality": "one", "source": "skill"}], "blocked": [{"artifact": "blocking_record", "cardinality": "one", "source": "skill"}]},
+        "exit_assertions_by_outcome": {"completed": ["verification_run_valid", "required_checks_complete", "runner_policy_honored", "verification_workspace_isolated", "check_pass_fail_evaluated", "delivery_receipt_valid"], "blocked": ["blocking_record_valid", "delivery_receipt_valid"]}
+      },
+      {
+        "step_id": "verifying.evaluate", "owner": "skill", "kind": "support", "public_state": "VERIFYING",
+        "preconditions": ["verification_run_frozen", "quality_scope_registered", "evaluation_policy_frozen", "evaluation_anchors_frozen"],
+        "allowed_outcomes": ["completed", "blocked"], "profile_ids": ["model-or-retrieval"],
+        "inputs": [{"artifact": "verification_run", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "skill", "producer_step_ids": ["verifying.run"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "evaluation_policy", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["guard.freeze"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "evaluation_anchors", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["guard.freeze"], "revision": "invocation_frozen", "digest": "required"}}],
+        "outputs_by_outcome": {"completed": [{"artifact": "evaluation_record", "cardinality": "one", "source": "skill"}], "blocked": [{"artifact": "blocking_record", "cardinality": "one", "source": "skill"}]},
+        "exit_assertions_by_outcome": {"completed": ["evaluation_record_valid", "evaluation_policy_honored", "judge_has_frozen_anchor", "delivery_receipt_valid"], "blocked": ["blocking_record_valid", "delivery_receipt_valid"]}
+      },
+      {
+        "step_id": "verifying.diagnose", "owner": "skill", "kind": "support", "public_state": "VERIFYING",
+        "preconditions": ["failure_event_set_frozen", "verification_or_evaluation_frozen", "implementation_manifest_frozen"],
+        "allowed_outcomes": ["correction_required", "blocked"], "profile_ids": ["diagnose"],
+        "inputs": [{"artifact": "failure_event_set", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["guard.freeze"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "verification_run", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "skill", "producer_step_ids": ["verifying.run"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "evaluation_record", "cardinality": "optional", "source": {"kind": "artifact_ref", "authority": "skill", "producer_step_ids": ["verifying.evaluate"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "implementation_manifest", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["implementing.manifest.append"], "revision": "invocation_frozen", "digest": "required"}}],
+        "outputs_by_outcome": {
+          "correction_required": [{"artifact": "diagnosis_record", "cardinality": "one", "source": "skill"}, {"artifact": "correction_proposal", "cardinality": "one", "source": "skill"}],
+          "blocked": [{"artifact": "diagnosis_record", "cardinality": "one", "source": "skill"}, {"artifact": "blocking_record", "cardinality": "one", "source": "skill"}]
+        },
+        "exit_assertions_by_outcome": {
+          "correction_required": ["diagnosis_traceable_to_failure", "correction_proposal_valid", "correction_scope_within_design", "delivery_receipt_valid"],
+          "blocked": ["diagnosis_traceable_to_failure", "blocking_record_valid", "delivery_receipt_valid"]
+        }
+      },
+      {
+        "step_id": "verifying.aggregate", "owner": "guard", "algorithm_id": "guard.verification.aggregate.v1", "kind": "aggregate", "public_state": "VERIFYING",
+        "preconditions": ["verification_run_frozen", "all_applicable_evaluations_resolved"],
+        "allowed_outcomes": ["passed", "blocked"], "profile_ids": [],
+        "inputs": [{"artifact": "verification_run", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "skill", "producer_step_ids": ["verifying.run"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "evaluation_record", "cardinality": "optional", "source": {"kind": "artifact_ref", "authority": "skill", "producer_step_ids": ["verifying.evaluate"], "revision": "invocation_frozen", "digest": "required"}}],
+        "outputs_by_outcome": {"passed": [{"artifact": "verification_summary", "cardinality": "one", "source": "guard"}], "blocked": [{"artifact": "guard_blocking_record", "cardinality": "one", "source": "guard"}]},
+        "exit_assertions_by_outcome": {"passed": ["all_required_checks_passed", "all_applicable_evaluations_passed", "verification_coverage_complete"], "blocked": ["blocking_record_valid"]}
+      }
+    ],
+    "routes": [
+      {"route_id": "verify-start", "decision_point": "start", "facts": {"always": true}, "next": {"step_id": "verifying.run", "profile_id": "run"}},
+      {"route_id": "verify-run-evaluate", "decision_point": "after:verifying.run", "facts": {"outcome": "completed", "quality_scope": true}, "next": {"step_id": "verifying.evaluate", "profile_id": "model-or-retrieval"}},
+      {"route_id": "verify-run-diagnose", "decision_point": "after:verifying.run", "facts": {"outcome": "completed", "quality_scope": false, "failures": "nonempty"}, "next": {"step_id": "verifying.diagnose", "profile_id": "diagnose"}},
+      {"route_id": "verify-run-aggregate", "decision_point": "after:verifying.run", "facts": {"outcome": "completed", "quality_scope": false, "failures": "empty"}, "next": {"step_id": "verifying.aggregate", "profile_id": null}},
+      {"route_id": "verify-run-blocked", "decision_point": "after:verifying.run", "facts": {"outcome": "blocked"}, "next": {"terminal_outcome": "blocked"}},
+      {"route_id": "verify-evaluate-diagnose", "decision_point": "after:verifying.evaluate", "facts": {"outcome": "completed", "combined_failures": "nonempty"}, "next": {"step_id": "verifying.diagnose", "profile_id": "diagnose"}},
+      {"route_id": "verify-evaluate-aggregate", "decision_point": "after:verifying.evaluate", "facts": {"outcome": "completed", "combined_failures": "empty"}, "next": {"step_id": "verifying.aggregate", "profile_id": null}},
+      {"route_id": "verify-evaluate-blocked", "decision_point": "after:verifying.evaluate", "facts": {"outcome": "blocked"}, "next": {"terminal_outcome": "blocked"}},
+      {"route_id": "verify-diagnose-correction", "decision_point": "after:verifying.diagnose", "facts": {"outcome": "correction_required"}, "next": {"terminal_outcome": "correction_required"}},
+      {"route_id": "verify-diagnose-blocked", "decision_point": "after:verifying.diagnose", "facts": {"outcome": "blocked"}, "next": {"terminal_outcome": "blocked"}},
+      {"route_id": "verify-aggregate-passed", "decision_point": "after:verifying.aggregate", "facts": {"outcome": "passed"}, "next": {"terminal_outcome": "completed"}},
+      {"route_id": "verify-aggregate-blocked", "decision_point": "after:verifying.aggregate", "facts": {"outcome": "blocked"}, "next": {"terminal_outcome": "blocked"}}
+    ],
+    "selection": "exactly_one_per_decision_point"
+  },
+  "reference_catalog": [
+    {"id": "verification-strategy", "path": "references/verification-strategy.md", "bundle_required": true},
+    {"id": "diagnosis-and-stability", "path": "references/diagnosis-and-stability.md", "bundle_required": true},
+    {"id": "model-and-retrieval-evaluation", "path": "references/model-and-retrieval-evaluation.md", "bundle_required": true}
+  ],
+  "profiles": [
+    {"id": "run", "step_ids": ["verifying.run"], "references": ["verification-strategy"], "max_references": 2},
+    {"id": "model-or-retrieval", "step_ids": ["verifying.evaluate"], "references": ["model-and-retrieval-evaluation"], "max_references": 2},
+    {"id": "diagnose", "step_ids": ["verifying.diagnose"], "references": ["diagnosis-and-stability"], "max_references": 2}
+  ],
+  "permissions": {"default": {"project_files": "allowed_read_objects", "network": "deny", "commands": "registered_checks_only", "runner": "registry_selected", "browser": "registered_target_only", "temp_artifacts": "guard_directory", "run_state": "deny", "approval": "deny", "version_selection": "deny", "profile_selection": "deny", "reference_selection": "deny"}, "step_overrides": []},
+  "evidence": {"trust_proof_schema": "artifact.package_trust_proof.v2", "delivery_receipt_schema": "artifact.delivery_receipt.v2", "fragment_schema": "artifact.evidence_fragment.v2", "index_schema": "artifact.evidence_index.v2", "index_owner": "guard", "truncation_allowed": false, "required_bindings": ["manifest_payload_hash", "signature_key_id", "invocation_digest", "provider_attestation_digest", "request_nonce", "implementation_manifest_digest", "check_registry_digest", "runner_policy_digest", "workspace_source_revision", "output_digest", "validity"]},
+  "acceptance": {
+    "evaluation_point": "before_external_acceptance", "aggregation": "all_applicable",
+    "criteria": [
+      {"id": "VER-AC-01", "assertion_id": "required_checks_complete_and_evaluated", "verifier": "guard", "evidence_schema_ids": ["artifact.verification_run.v2"], "applicability_predicate": "always", "not_applicable_assertion_id": "not_applicable_never", "blocking": true},
+      {"id": "VER-AC-02", "assertion_id": "runner_policy_honored", "verifier": "guard", "evidence_schema_ids": ["artifact.verification_run.v2", "policy.runner.v2"], "applicability_predicate": "always", "not_applicable_assertion_id": "not_applicable_never", "blocking": true},
+      {"id": "VER-AC-03", "assertion_id": "verification_workspace_isolated", "verifier": "guard", "evidence_schema_ids": ["artifact.verification_run.v2", "artifact.workspace_snapshot.v2"], "applicability_predicate": "always", "not_applicable_assertion_id": "not_applicable_never", "blocking": true},
+      {"id": "VER-AC-04", "assertion_id": "verification_coverage_complete", "verifier": "guard", "evidence_schema_ids": ["artifact.verification_summary.v1"], "applicability_predicate": "always", "not_applicable_assertion_id": "not_applicable_never", "blocking": true},
+      {"id": "VER-AC-05", "assertion_id": "failure_diagnosis_traceable", "verifier": "guard", "evidence_schema_ids": ["artifact.diagnosis_record.v2", "artifact.failure_event_set.v1"], "applicability_predicate": "failures_present", "not_applicable_assertion_id": "no_failures_proven", "blocking": true},
+      {"id": "VER-AC-06", "assertion_id": "evaluation_policy_and_anchors_honored", "verifier": "guard", "evidence_schema_ids": ["artifact.evaluation_record.v2", "policy.evaluation.v1"], "applicability_predicate": "quality_scope_registered", "not_applicable_assertion_id": "quality_scope_not_registered_proven", "blocking": true},
+      {"id": "VER-AC-07", "assertion_id": "verification_correction_bounded_and_no_acceptance", "verifier": "guard", "evidence_schema_ids": ["artifact.correction_proposal.v1", "artifact.diagnosis_record.v2"], "applicability_predicate": "correction_proposal_present", "not_applicable_assertion_id": "no_correction_proposal_proven", "blocking": true},
+      {"id": "VER-AC-08", "assertion_id": "verification_delivery_evidence_complete", "verifier": "guard", "evidence_schema_ids": ["artifact.delivery_receipt.v2", "artifact.evidence_fragment.v2"], "applicability_predicate": "skill_steps_executed", "not_applicable_assertion_id": "no_skill_step_invalid", "blocking": true}
+    ],
+    "self_test_is_acceptance": false
+  },
+  "errors": {"valid_outcomes": ["completed", "correction_required", "passed", "blocked"], "contract_violations": ["INPUT_SCHEMA_INVALID", "OUTPUT_SCHEMA_INVALID", "ROUTE_SELECTION_INVALID", "PROFILE_SELECTION_INVALID", "BUNDLE_SIGNATURE_INVALID", "BUNDLE_REVOKED", "DELIVERY_UNVERIFIED", "UNREGISTERED_CHECK", "RUNNER_POLICY_ESCAPE", "SOURCE_REVISION_MUTATION", "TOOL_EVENT_FORGED", "JUDGE_POLICY_ESCAPE", "SELF_APPROVAL_ATTEMPT"]},
+  "upgrade": {"compatibility": "new_version_requires_new_freeze", "fallback": "deny", "migration": "out_of_band_review"}
+}

@@ -1,0 +1,124 @@
+{
+  "schema_version": "skill-contract.v3",
+  "skill": {"id": "execute-in-slices", "version": "3.3.0", "stage": "implementing", "entrypoint": "SKILL.md"},
+  "trust": {"manifest_schema": "package-manifest.v2", "canonicalization_policy_id": "bundle-canonical-windows.v1", "signature_policy_id": "skill-signature-ed25519.v1", "trust_store_id": "opencode-skill-trust.v1", "revocation_policy_id": "skill-revocation.v1", "registry_record_required": true, "atomic_install_required": true},
+  "artifact_catalog": [
+    {"name": "requirements_contract", "schema_id": "artifact.requirements_contract.v2", "producer": "skill"},
+    {"name": "solution_design", "schema_id": "artifact.solution_design.v2", "producer": "skill"},
+    {"name": "implementation_slice", "schema_id": "artifact.implementation_slice.v2", "producer": "guard"},
+    {"name": "write_lease", "schema_id": "lease.write.v2", "producer": "guard"},
+    {"name": "workspace_snapshot", "schema_id": "artifact.workspace_snapshot.v2", "producer": "guard"},
+    {"name": "check_registry", "schema_id": "registry.checks.v2", "producer": "guard"},
+    {"name": "path_policy", "schema_id": "policy.path_identity.v1", "producer": "guard"},
+    {"name": "implementation_record", "schema_id": "artifact.implementation_record.v2", "producer": "skill"},
+    {"name": "implementation_manifest", "schema_id": "artifact.implementation_manifest.v2", "producer": "guard"},
+    {"name": "correction_proposal", "schema_id": "artifact.correction_proposal.v1", "producer": "skill_or_guard"},
+    {"name": "correction_decision", "schema_id": "artifact.correction_decision.v1", "producer": "guard"},
+    {"name": "blocking_record", "schema_id": "artifact.blocking_record.v1", "producer": "skill"},
+    {"name": "guard_blocking_record", "schema_id": "artifact.blocking_record.v1", "producer": "guard"},
+    {"name": "applicability_evidence", "schema_id": "artifact.applicability_evidence.v1", "producer": "guard"}
+  ],
+  "lifecycle": {
+    "public_states": ["IMPLEMENTING"],
+    "steps": [
+      {
+        "step_id": "implementing.slice", "owner": "skill", "kind": "primary", "public_state": "IMPLEMENTING",
+        "preconditions": ["requirements_frozen", "design_frozen", "slice_is_current", "write_lease_active", "workspace_revision_matches", "check_registry_frozen"],
+        "allowed_outcomes": ["completed", "correction_required", "blocked"], "profile_ids": ["standard", "security-or-refactor", "model-integration", "ui"],
+        "inputs": [{"artifact": "requirements_contract", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "skill", "producer_step_ids": ["planning.requirements.finalize"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "solution_design", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "skill", "producer_step_ids": ["planning.design.finalize"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "implementation_slice", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["guard.freeze"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "write_lease", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["guard.freeze"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "workspace_snapshot", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["guard.freeze"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "check_registry", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["guard.freeze"], "revision": "invocation_frozen", "digest": "required"}}],
+        "outputs_by_outcome": {
+          "completed": [{"artifact": "implementation_record", "cardinality": "one", "source": "skill"}],
+          "correction_required": [{"artifact": "implementation_record", "cardinality": "one", "source": "skill"}, {"artifact": "correction_proposal", "cardinality": "one", "source": "skill"}],
+          "blocked": [{"artifact": "blocking_record", "cardinality": "one", "source": "skill"}]
+        },
+        "exit_assertions_by_outcome": {
+          "completed": ["write_lease_valid", "actual_diff_matches_record", "changed_path_objects_allowed", "slice_checks_recorded", "required_slice_checks_passed", "workspace_after_cas", "delivery_receipt_valid"],
+          "correction_required": ["implementation_record_valid", "actual_diff_matches_record", "correction_proposal_valid", "correction_scope_within_design", "no_next_slice_started", "delivery_receipt_valid"],
+          "blocked": ["blocking_record_valid", "no_next_slice_started", "delivery_receipt_valid"]
+        }
+      },
+      {
+        "step_id": "implementing.manifest.append", "owner": "guard", "algorithm_id": "guard.manifest.append.v1", "kind": "aggregate", "public_state": "IMPLEMENTING",
+        "preconditions": ["implementation_record_frozen", "design_frozen"],
+        "allowed_outcomes": ["completed", "blocked"], "profile_ids": [],
+        "inputs": [{"artifact": "implementation_record", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "skill", "producer_step_ids": ["implementing.slice"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "implementation_manifest", "cardinality": "optional", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["implementing.manifest.append"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "solution_design", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "skill", "producer_step_ids": ["planning.design.finalize"], "revision": "invocation_frozen", "digest": "required"}}],
+        "outputs_by_outcome": {"completed": [{"artifact": "implementation_manifest", "cardinality": "one", "source": "guard"}], "blocked": [{"artifact": "guard_blocking_record", "cardinality": "one", "source": "guard"}]},
+        "exit_assertions_by_outcome": {"completed": ["implementation_manifest_ordered", "implementation_manifest_complete_to_current_slice"], "blocked": ["blocking_record_valid"]}
+      },
+      {
+        "step_id": "correction.route", "owner": "guard", "algorithm_id": "guard.correction.route.v1", "kind": "transition", "public_state": "IMPLEMENTING",
+        "preconditions": ["correction_proposal_frozen", "design_frozen", "workspace_revision_matches"],
+        "allowed_outcomes": ["retry_current_slice", "create_bounded_correction", "return_to_design", "blocked"], "profile_ids": [],
+        "inputs": [{"artifact": "correction_proposal", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "skill_or_guard", "producer_step_ids": ["implementing.slice", "verifying.diagnose", "review.aggregate"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "solution_design", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "skill", "producer_step_ids": ["planning.design.finalize"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "workspace_snapshot", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["guard.freeze"], "revision": "invocation_frozen", "digest": "required"}}, {"artifact": "path_policy", "cardinality": "one", "source": {"kind": "artifact_ref", "authority": "guard", "producer_step_ids": ["guard.freeze"], "revision": "invocation_frozen", "digest": "required"}}],
+        "outputs_by_outcome": {
+          "retry_current_slice": [{"artifact": "correction_decision", "cardinality": "one", "source": "guard"}],
+          "create_bounded_correction": [{"artifact": "correction_decision", "cardinality": "one", "source": "guard"}],
+          "return_to_design": [{"artifact": "correction_decision", "cardinality": "one", "source": "guard"}],
+          "blocked": [{"artifact": "guard_blocking_record", "cardinality": "one", "source": "guard"}]
+        },
+        "exit_assertions_by_outcome": {
+          "retry_current_slice": ["retry_within_limit", "correction_scope_within_design"],
+          "create_bounded_correction": ["correction_scope_within_design", "correction_slice_valid"],
+          "return_to_design": ["design_revision_required_reason_present"],
+          "blocked": ["blocking_record_valid"]
+        }
+      }
+    ],
+    "routes": [
+      {"route_id": "slice-start-standard", "decision_point": "start", "facts": {"slice_kind": "standard"}, "next": {"step_id": "implementing.slice", "profile_id": "standard"}},
+      {"route_id": "slice-start-security", "decision_point": "start", "facts": {"slice_kind": "security_or_refactor"}, "next": {"step_id": "implementing.slice", "profile_id": "security-or-refactor"}},
+      {"route_id": "slice-start-model", "decision_point": "start", "facts": {"slice_kind": "model_integration"}, "next": {"step_id": "implementing.slice", "profile_id": "model-integration"}},
+      {"route_id": "slice-start-ui", "decision_point": "start", "facts": {"slice_kind": "ui"}, "next": {"step_id": "implementing.slice", "profile_id": "ui"}},
+      {"route_id": "slice-completed", "decision_point": "after:implementing.slice", "facts": {"outcome": "completed"}, "next": {"step_id": "implementing.manifest.append", "profile_id": null}},
+      {"route_id": "slice-correction", "decision_point": "after:implementing.slice", "facts": {"outcome": "correction_required"}, "next": {"step_id": "correction.route", "profile_id": null}},
+      {"route_id": "slice-blocked", "decision_point": "after:implementing.slice", "facts": {"outcome": "blocked"}, "next": {"terminal_outcome": "blocked"}},
+      {"route_id": "manifest-complete-all", "decision_point": "after:implementing.manifest.append", "facts": {"outcome": "completed", "remaining_slices": false}, "next": {"terminal_outcome": "completed"}},
+      {"route_id": "manifest-next-standard", "decision_point": "after:implementing.manifest.append", "facts": {"outcome": "completed", "remaining_slices": true, "next_slice_kind": "standard"}, "next": {"step_id": "implementing.slice", "profile_id": "standard"}},
+      {"route_id": "manifest-next-security", "decision_point": "after:implementing.manifest.append", "facts": {"outcome": "completed", "remaining_slices": true, "next_slice_kind": "security_or_refactor"}, "next": {"step_id": "implementing.slice", "profile_id": "security-or-refactor"}},
+      {"route_id": "manifest-next-model", "decision_point": "after:implementing.manifest.append", "facts": {"outcome": "completed", "remaining_slices": true, "next_slice_kind": "model_integration"}, "next": {"step_id": "implementing.slice", "profile_id": "model-integration"}},
+      {"route_id": "manifest-next-ui", "decision_point": "after:implementing.manifest.append", "facts": {"outcome": "completed", "remaining_slices": true, "next_slice_kind": "ui"}, "next": {"step_id": "implementing.slice", "profile_id": "ui"}},
+      {"route_id": "manifest-blocked", "decision_point": "after:implementing.manifest.append", "facts": {"outcome": "blocked"}, "next": {"terminal_outcome": "blocked"}},
+      {"route_id": "correction-retry-standard", "decision_point": "after:correction.route", "facts": {"outcome": "retry_current_slice", "slice_kind": "standard"}, "next": {"step_id": "implementing.slice", "profile_id": "standard"}},
+      {"route_id": "correction-retry-security", "decision_point": "after:correction.route", "facts": {"outcome": "retry_current_slice", "slice_kind": "security_or_refactor"}, "next": {"step_id": "implementing.slice", "profile_id": "security-or-refactor"}},
+      {"route_id": "correction-retry-model", "decision_point": "after:correction.route", "facts": {"outcome": "retry_current_slice", "slice_kind": "model_integration"}, "next": {"step_id": "implementing.slice", "profile_id": "model-integration"}},
+      {"route_id": "correction-retry-ui", "decision_point": "after:correction.route", "facts": {"outcome": "retry_current_slice", "slice_kind": "ui"}, "next": {"step_id": "implementing.slice", "profile_id": "ui"}},
+      {"route_id": "correction-create-standard", "decision_point": "after:correction.route", "facts": {"outcome": "create_bounded_correction", "slice_kind": "standard"}, "next": {"step_id": "implementing.slice", "profile_id": "standard"}},
+      {"route_id": "correction-create-security", "decision_point": "after:correction.route", "facts": {"outcome": "create_bounded_correction", "slice_kind": "security_or_refactor"}, "next": {"step_id": "implementing.slice", "profile_id": "security-or-refactor"}},
+      {"route_id": "correction-create-model", "decision_point": "after:correction.route", "facts": {"outcome": "create_bounded_correction", "slice_kind": "model_integration"}, "next": {"step_id": "implementing.slice", "profile_id": "model-integration"}},
+      {"route_id": "correction-create-ui", "decision_point": "after:correction.route", "facts": {"outcome": "create_bounded_correction", "slice_kind": "ui"}, "next": {"step_id": "implementing.slice", "profile_id": "ui"}},
+      {"route_id": "correction-return-design", "decision_point": "after:correction.route", "facts": {"outcome": "return_to_design"}, "next": {"terminal_outcome": "changes_required"}},
+      {"route_id": "correction-blocked", "decision_point": "after:correction.route", "facts": {"outcome": "blocked"}, "next": {"terminal_outcome": "blocked"}}
+    ],
+    "selection": "exactly_one_per_decision_point"
+  },
+  "reference_catalog": [
+    {"id": "slice-discipline", "path": "references/slice-discipline.md", "bundle_required": true},
+    {"id": "integration-patterns", "path": "references/integration-patterns.md", "bundle_required": true},
+    {"id": "change-safety", "path": "references/change-safety.md", "bundle_required": true},
+    {"id": "ui-slice-patterns", "path": "references/ui-slice-patterns.md", "bundle_required": true}
+  ],
+  "profiles": [
+    {"id": "standard", "step_ids": ["implementing.slice"], "references": ["slice-discipline"], "max_references": 2},
+    {"id": "security-or-refactor", "step_ids": ["implementing.slice"], "references": ["slice-discipline", "change-safety"], "max_references": 2},
+    {"id": "model-integration", "step_ids": ["implementing.slice"], "references": ["slice-discipline", "integration-patterns"], "max_references": 2},
+    {"id": "ui", "step_ids": ["implementing.slice"], "references": ["slice-discipline", "ui-slice-patterns"], "max_references": 2}
+  ],
+  "permissions": {"default": {"project_files": "lease_write_objects", "network": "deny", "commands": "registered_checks_only", "runner": "registry_selected", "browser": "registered_target_only", "temp_artifacts": "guard_directory", "run_state": "deny", "approval": "deny", "version_selection": "deny", "profile_selection": "deny", "reference_selection": "deny"}, "step_overrides": []},
+  "evidence": {"trust_proof_schema": "artifact.package_trust_proof.v2", "delivery_receipt_schema": "artifact.delivery_receipt.v2", "fragment_schema": "artifact.evidence_fragment.v2", "index_schema": "artifact.evidence_index.v2", "index_owner": "guard", "truncation_allowed": false, "required_bindings": ["manifest_payload_hash", "signature_key_id", "invocation_digest", "provider_attestation_digest", "request_nonce", "lease_id", "workspace_before", "workspace_after", "tool_event_digests", "output_digest", "validity"]},
+  "acceptance": {
+    "evaluation_point": "before_external_acceptance", "aggregation": "all_applicable",
+    "criteria": [
+      {"id": "EXE-AC-01", "assertion_id": "write_lease_and_workspace_valid", "verifier": "guard", "evidence_schema_ids": ["lease.write.v2", "artifact.implementation_record.v2"], "applicability_predicate": "implementation_slice_executed", "not_applicable_assertion_id": "no_implementation_slice_invalid", "blocking": true},
+      {"id": "EXE-AC-02", "assertion_id": "changed_path_objects_allowed", "verifier": "guard", "evidence_schema_ids": ["artifact.implementation_record.v2"], "applicability_predicate": "completed_slices_present", "not_applicable_assertion_id": "no_completed_slice_proven", "blocking": true},
+      {"id": "EXE-AC-03", "assertion_id": "single_slice_no_bypass", "verifier": "guard", "evidence_schema_ids": ["artifact.implementation_record.v2", "artifact.evidence_fragment.v2"], "applicability_predicate": "implementation_slice_executed", "not_applicable_assertion_id": "no_implementation_slice_invalid", "blocking": true},
+      {"id": "EXE-AC-04", "assertion_id": "actual_diff_and_tool_events_match", "verifier": "guard", "evidence_schema_ids": ["artifact.implementation_record.v2"], "applicability_predicate": "implementation_slice_executed", "not_applicable_assertion_id": "no_implementation_slice_invalid", "blocking": true},
+      {"id": "EXE-AC-05", "assertion_id": "required_slice_checks_passed", "verifier": "registered_check", "evidence_schema_ids": ["artifact.implementation_record.v2", "registry.checks.v2"], "applicability_predicate": "completed_slices_present", "not_applicable_assertion_id": "no_completed_slice_proven", "blocking": true},
+      {"id": "EXE-AC-06", "assertion_id": "security_refactor_invariants_passed", "verifier": "registered_check", "evidence_schema_ids": ["artifact.implementation_record.v2"], "applicability_predicate": "security_or_refactor_slice_present", "not_applicable_assertion_id": "security_refactor_not_applicable_proven", "blocking": true},
+      {"id": "EXE-AC-07", "assertion_id": "correction_scope_within_design", "verifier": "guard", "evidence_schema_ids": ["artifact.correction_proposal.v1", "artifact.correction_decision.v1"], "applicability_predicate": "correction_proposal_present", "not_applicable_assertion_id": "no_correction_proposal_proven", "blocking": true},
+      {"id": "EXE-AC-08", "assertion_id": "implementation_manifest_and_delivery_complete", "verifier": "guard", "evidence_schema_ids": ["artifact.implementation_manifest.v2", "artifact.delivery_receipt.v2", "artifact.evidence_fragment.v2"], "applicability_predicate": "completed_slices_present", "not_applicable_assertion_id": "no_completed_slice_proven", "blocking": true}
+    ],
+    "self_test_is_acceptance": false
+  },
+  "errors": {"valid_outcomes": ["completed", "correction_required", "retry_current_slice", "create_bounded_correction", "return_to_design", "changes_required", "blocked"], "contract_violations": ["INPUT_SCHEMA_INVALID", "OUTPUT_SCHEMA_INVALID", "ROUTE_SELECTION_INVALID", "PROFILE_SELECTION_INVALID", "BUNDLE_SIGNATURE_INVALID", "BUNDLE_REVOKED", "DELIVERY_UNVERIFIED", "LEASE_INVALID", "PATH_IDENTITY_INVALID", "TOOL_EVENT_FORGED", "REQUIRED_CHECK_FAILED_AS_COMPLETED", "FROZEN_VALUE_MUTATION", "SELF_APPROVAL_ATTEMPT"]},
+  "upgrade": {"compatibility": "new_version_requires_new_freeze", "fallback": "deny", "migration": "out_of_band_review"}
+}

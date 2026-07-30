@@ -1,0 +1,523 @@
+{
+  "schema_version": "guard-registry-component.v1",
+  "kind": "artifact_schemas",
+  "entries": [
+    {
+      "id": "artifact.acceptance_decision.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.acceptance_decision.v1.schema.json",
+      "schema_digest": "48f06fcd2290b309c7547c76f78bc1dd658a841b7b8a0fa60779e36f4427939c",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.acceptance_transition.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.acceptance_transition.v1.schema.json",
+      "schema_digest": "cd6c370366fa35020790eebfc6020eaae97b6632e534723ef02661ed2a3e49a1",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.applicability_evidence.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.applicability_evidence.v1.schema.json",
+      "schema_digest": "8fc2d6e3631134fbe216845ceb436a8541b386a52a7366c00101820d4eb671e4",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.architecture_fragment.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.architecture_fragment.v2.schema.json",
+      "schema_digest": "4036342aa2c45860cfdd69aacb473a53e349e671105bd2f46e548309eb0a5084",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.artifact_collection_ref.v1",
+      "status": "defined",
+      "schema_path": "schemas/artifact-reference.v1.schema.json",
+      "fragment": "#/$defs/artifact_collection_ref",
+      "schema_uri": "https://opencode.local/artifact-schemas/artifact.artifact_collection_ref.v1",
+      "file_sha256": "3bb265607c8937cd51b218e1568bae80ce36b997491d1f77bbdb468e0fb8b25e"
+    },
+    {
+      "id": "artifact.artifact_ref.v1",
+      "status": "defined",
+      "schema_path": "schemas/artifact-reference.v1.schema.json",
+      "fragment": "#/$defs/artifact_ref",
+      "schema_uri": "https://opencode.local/artifact-schemas/artifact.artifact_ref.v1",
+      "file_sha256": "3bb265607c8937cd51b218e1568bae80ce36b997491d1f77bbdb468e0fb8b25e"
+    },
+    {
+      "id": "artifact.blocking_record.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.blocking_record.v1.schema.json",
+      "schema_digest": "4a4399484561cfa981d58be5b21878146589a32de6c218d6a438b95b531c2f55",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.correction_decision.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.correction_decision.v1.schema.json",
+      "schema_digest": "47f9a10b8e630f49c9914591b66388882b36f63100e3bf9973489ca615136647",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.correction_proposal.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.correction_proposal.v1.schema.json",
+      "schema_digest": "5b74e0a2d94892eb5b4cb7c42a3a38c5823fd441e018210f99b91e69c456b66b",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.delivery_receipt.v2",
+      "status": "defined",
+      "schema_path": "schemas/delivery-receipt.v2.schema.json",
+      "fragment": "#",
+      "schema_uri": "https://opencode.local/artifact-schemas/artifact.delivery_receipt.v2",
+      "file_sha256": "46aed9ddeac2ec5e60bc2cbd154b4f149e4269f7dc857b0306dedb2e387c02d6"
+    },
+    {
+      "id": "artifact.design_issue_set.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.design_issue_set.v1.schema.json",
+      "schema_digest": "9ff131360dd475f17ff17b8a3976de2754a45948ad39bd26a82b52c66aeab465",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.diagnosis_record.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.diagnosis_record.v2.schema.json",
+      "schema_digest": "b517f2d61c252a7251cbe15918e3b57e18c43378c80a63dd2f9face3df6c11d1",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.evaluation_anchor_set.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.evaluation_anchor_set.v1.schema.json",
+      "schema_digest": "b047d4ad6bc55f937ad3a8c03000fefdbd5a1524467f936b0b7f7b42da9f948c",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.evaluation_record.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.evaluation_record.v2.schema.json",
+      "schema_digest": "2b220690672abe0195dbbb7b77857783ed91c0dcb6419c0341c7ba3f3e50f1e4",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.evidence_fragment.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.evidence_fragment.v2.schema.json",
+      "schema_digest": "c8d5bb440dbe1cb6103cec06b1853f3f2bcc588cb1a54b41de38e48792f8c701",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.evidence_index.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.evidence_index.v2.schema.json",
+      "schema_digest": "07e59caee9f29fdb72f2ffde00f433c0150aa62a65d87cdd75ec101157357061",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.failure_event_set.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.failure_event_set.v1.schema.json",
+      "schema_digest": "59a9d306d956e6fc6029ec71aa21bf0b18824672abe19fa166b1ae95a09a10a9",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.handoff.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.handoff.v2.schema.json",
+      "schema_digest": "b0a5164379208cefa36e4a8f3d00415705ec84dcdb2c219a6fc22cb92a3192ee",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.impact_fragment.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.impact_fragment.v2.schema.json",
+      "schema_digest": "5e2567d8fb6cf5a5532e00bdfd208d245dc410759f90081acdfa557a6decc8cd",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.implementation_manifest.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.implementation_manifest.v2.schema.json",
+      "schema_digest": "941579983fead83ab3848ff45d2c923eec94e2815459539676613a55cdbbc802",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.implementation_record_collection.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.implementation_record_collection.v1.schema.json",
+      "schema_digest": "8422f5bf68cf2ae7d494287ec0c497c6430002b5730ccfb82c058f8fe550e61d",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.implementation_record.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.implementation_record.v2.schema.json",
+      "schema_digest": "9c3aba490615705a10513b12016d0d12ef06f5975ff2d5e3f9e05892b9d5686f",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.implementation_slice.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.implementation_slice.v2.schema.json",
+      "schema_digest": "68478d5750220bc8ffc8280ef1640d01931f1672ef98321d68e56874c4f00e30",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.package_trust_proof.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.package_trust_proof.v2.schema.json",
+      "schema_digest": "dafe587b752aadafb05a71a50eaaf3a48d20013604c61fb1f961197f65707163",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.pattern_fragment.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.pattern_fragment.v2.schema.json",
+      "schema_digest": "0c5387f911cea52d8fc656fb2b58c7f633ec12d56da078df02cdce6043c45c2d",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.phase_gate_record.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.phase_gate_record.v1.schema.json",
+      "schema_digest": "eaece1d0d19db4f63f6912cab4082802d68230166dfd0968e6faf2e98e2c5e64",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.project_context.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.project_context.v1.schema.json",
+      "schema_digest": "04c4782e591298abb9a4614d6cd28b996bd87059d1a72d6f594fc7b2ad394f18",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.question_response_bundle.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.question_response_bundle.v1.schema.json",
+      "schema_digest": "8ac0940554b1943d4c07b0b3806cee7f555bef3dcd69f8b51a7c9c787b4de13f",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.question_response.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.question_response.v1.schema.json",
+      "schema_digest": "190cd0fc324a9f30388e6a79f82fd4c8794064417f6cb64d8d8fe1bbe6ed156e",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.question_set.v2",
+      "status": "defined",
+      "schema_path": "schemas/question-set.v2.schema.json",
+      "fragment": "#",
+      "schema_uri": "https://opencode.local/artifact-schemas/artifact.question_set.v2",
+      "file_sha256": "5228c4b2da600bcf7ec158d589cced14e2ddfd94f236b110442d6ffeed501587"
+    },
+    {
+      "id": "artifact.repository_context.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.repository_context.v2.schema.json",
+      "schema_digest": "532862a38d195feddfdc4dd330e0c7c5c787a3bfe0e8ac94f7458bb7054e2653",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.request.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.request.v1.schema.json",
+      "schema_digest": "42f8be74910a273a60af8bbc3052bf835910a54a34fdc4aa68327f599b3cc6ff",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.requirements_contract.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.requirements_contract.v2.schema.json",
+      "schema_digest": "be140e2b059d709d9f7a82b939994a2becb3333796fb9209f2e789a32ba0991d",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.requirements_draft.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.requirements_draft.v2.schema.json",
+      "schema_digest": "31c67ca222ba6069dc04de84d856f8ec75fdf43db08ab307c8f792b735f4d5d2",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.research_record.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.research_record.v2.schema.json",
+      "schema_digest": "4bf8b71cecd86c68374092ab3570a56a5406058b4cabdef32f3a614b8ccea819",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.research_request_set.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.research_request_set.v1.schema.json",
+      "schema_digest": "ee307fd9d581255d2b33e8d7bf0dcf89a5c61d2ed542340b1d3beec1128a4e50",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.review_basis.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.review_basis.v1.schema.json",
+      "schema_digest": "be362c5818948aa1d284abd1fc1c6dc9cb427ad5218f4870cf54f5a82af445d1",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.review_fragment_collection.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.review_fragment_collection.v1.schema.json",
+      "schema_digest": "f75134fe9c5dcee9166420a026401a066b4774dd3b11c38680ccca57009fcfe8",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.review_fragment.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.review_fragment.v2.schema.json",
+      "schema_digest": "f45ad55396ee4d4790acdf3dc68575b00ec1d927724a55286be51a76dd3131c9",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.review_record.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.review_record.v2.schema.json",
+      "schema_digest": "8d87ccfeebbacbf6f2d9d52fb09d0636af22d96b1c58a498a8c909ed390315cb",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.review_scope.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.review_scope.v1.schema.json",
+      "schema_digest": "b9cde13cc0c6bdda74072e36998e7d3a95083ec239eb05b439fd632bd865abc7",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.simplicity_entry_set.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.simplicity_entry_set.v1.schema.json",
+      "schema_digest": "0055d6b0122733b7a0890a1ff552cffcd8324b818dbed3d6dff1b9600ca1e6e2",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.simplicity_record.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.simplicity_record.v2.schema.json",
+      "schema_digest": "729c1a7bc619ec7384e8f37ba6e18e55b246d4f67f28aad18d9d0382efea9181",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.solution_design.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.solution_design.v2.schema.json",
+      "schema_digest": "3e63313bbf25b7d14e17d1ffc376dcb4e57807a6fcf7f48bf4d40e47b8682079",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.verification_run.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.verification_run.v2.schema.json",
+      "schema_digest": "921848223273fe9a1fb0d838cf034d13c98d2d85a1ff4378976d26dc2b3a2b6b",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.verification_summary.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.verification_summary.v1.schema.json",
+      "schema_digest": "24cb477859a0a8e1bd3e201ec2ff8485d94815ed98af439ef7b26625d5acf1a8",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "artifact.workspace_snapshot.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/artifact.workspace_snapshot.v2.schema.json",
+      "schema_digest": "7aa72204966127cc89a6cffe0ab6c561723fec373a2928ae356db46958545e2b",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "identity.reviewer_attestation.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/identity.reviewer_attestation.v2.schema.json",
+      "schema_digest": "827aa9a208fe97d9a439a74897d873d1ac6265a8c6fe84395f7596abecefe273",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "lease.write.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/lease.write.v2.schema.json",
+      "schema_digest": "7831ae224ecfeea2b7be22ec5d49d6ca9b95905594fcfe26aa184224da221440",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "package-manifest.v2",
+      "status": "defined",
+      "schema_path": "schemas/package-manifest.v2.schema.json",
+      "fragment": "#",
+      "schema_uri": "https://opencode.local/artifact-schemas/package-manifest.v2",
+      "file_sha256": "dfbdc7cdc40a7bc7f2a3a4bbd82c659a1ead32bf477cef1da1b9a418e06934b2"
+    },
+    {
+      "id": "policy.acceptance.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/policy.acceptance.v1.schema.json",
+      "schema_digest": "0d56c74f33e98a2ef1d36b81546630a5844fda36f6a2b6a4bcfd6afb1c524745",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "policy.evaluation.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/policy.evaluation.v1.schema.json",
+      "schema_digest": "94092b79d99e20db069fee8c5a289cfe79a45b931ba73f0fd2c55849ae3fe8d7",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "policy.path_identity.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/policy.path_identity.v1.schema.json",
+      "schema_digest": "04c2f7e663b25f33e39588b02e6c640f536878f44f421b251c1eee026d8ec46f",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "policy.research.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/policy.research.v1.schema.json",
+      "schema_digest": "fcef657b9151829ed36dcb6004cdaca6d2ffe6610687b2ced14e81d1026edcaf",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "policy.runner.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/policy.runner.v2.schema.json",
+      "schema_digest": "5aa9242909a8fc7c19565904555b72e544d6449c4422b73f469b0676c3b6557d",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "provider-delivery.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/provider-delivery.v1.schema.json",
+      "schema_digest": "e277f49ab1ad27e616e17f7e4b4f3e9abab5db5d2271cf9243806bd2926a2600",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "registry.checks.v2",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/registry.checks.v2.schema.json",
+      "schema_digest": "d35c241155cdea5a2882726dc304175c1067dd922c517831b2a6028b6ca4fa48",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    },
+    {
+      "id": "registry.patterns.v1",
+      "status": "external_registered",
+      "registry_id": "opencode-runtime-artifact-registry",
+      "registry_version": "1.0.0",
+      "schema_uri": "https://schemas.opencode.local/runtime/v1/registry.patterns.v1.schema.json",
+      "schema_digest": "9a3dbb38d97438d4e51055ca1452d56070b214a3df26fba4b19a8c9d524d0b5b",
+      "registry_attestation_id": "opencode-runtime-artifacts-v1"
+    }
+  ]
+}
